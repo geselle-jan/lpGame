@@ -48,7 +48,7 @@ namespace lp
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             IsFixedTimeStep = true;
-            TargetElapsedTime = TimeSpan.FromSeconds(1 / 120.0f);
+            TargetElapsedTime = TimeSpan.FromSeconds(1 / 240.0f);
         }
 
         protected override void Initialize()
@@ -304,7 +304,15 @@ namespace lp
 
             foreach (var layer in _tiledMap.Layers)
             {
-                if (layer.Name == "deco2")
+                if (layer.Name == "background2")
+                {
+                    _spriteBatch.Draw(layer, _camera);
+                }
+            }
+
+            foreach (var layer in _tiledMap.Layers)
+            {
+                if (layer.Name == "background1")
                 {
                     _spriteBatch.Draw(layer, _camera);
                 }
@@ -314,7 +322,15 @@ namespace lp
 
             foreach (var layer in _tiledMap.Layers)
             {
-                if (layer.Name == "deco1")
+                if (layer.Name == "foreground2")
+                {
+                    _spriteBatch.Draw(layer, _camera);
+                }
+            }
+
+            foreach (var layer in _tiledMap.Layers)
+            {
+                if (layer.Name == "foreground1")
                 {
                     _spriteBatch.Draw(layer, _camera);
                 }

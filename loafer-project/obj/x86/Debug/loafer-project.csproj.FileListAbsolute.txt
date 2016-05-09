@@ -33,3 +33,6 @@ C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\D
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\NVorbis.dll
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\OpenTK.dll
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\obj\x86\Debug\loafer-project.csprojResolveAssemblyReference.cache
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\corridor1.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\debug.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\yellow.xnb

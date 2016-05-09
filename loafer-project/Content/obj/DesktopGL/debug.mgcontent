@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/highlight.png</SourceFile>
-  <SourceTime>2016-05-09T17:45:30.3886876+02:00</SourceTime>
-  <DestFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/bin/DesktopGL/highlight.xnb</DestFile>
-  <DestTime>2016-05-09T18:16:45.1404769+02:00</DestTime>
+  <SourceFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/debug.png</SourceFile>
+  <SourceTime>2016-04-28T13:27:58.4343191+02:00</SourceTime>
+  <DestFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/bin/DesktopGL/debug.xnb</DestFile>
+  <DestTime>2016-05-09T18:16:45.1703117+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
