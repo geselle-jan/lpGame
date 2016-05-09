@@ -23,10 +23,6 @@ namespace Test
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
         private ViewportAdapter _viewportAdapter;
-        private float gameWidth;
-        private float gameHeight;
-        private float mapWidth;
-        private float mapHeight;
         private Texture2D player;
         private Texture2D highlight;
         private Texture2D backgroundImage;
@@ -35,22 +31,19 @@ namespace Test
         private int gravity = 5;
         private Vector2 velocity = Vector2.Zero;
         private bool isJumping = false;
-        private bool cameraFollow = false;
+        private bool cameraFollow = true;
+        private float zoom = 4;
 
         public Game1()
         {
-            mapWidth = 60 * 16;
-            mapHeight = 40 * 16;
-
-            gameWidth = mapWidth;
-            gameHeight = mapHeight;
             
             _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
-            _graphicsDeviceManager.PreferredBackBufferWidth = (int)gameWidth;
-            _graphicsDeviceManager.PreferredBackBufferHeight = (int)gameHeight;
+            _graphicsDeviceManager.IsFullScreen = true;
+            _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1 / 120.0f);
         }
@@ -64,11 +57,11 @@ namespace Test
 
             _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
             _camera = new Camera2D(_viewportAdapter);
+            _camera.Zoom = zoom;
 
-            _camera.Position = new Vector2((gameWidth / -2) + (mapWidth / 2), (gameHeight / -2) + (mapHeight / 2));
-            _camera.Zoom = 1;
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
 
-            Window.AllowUserResizing = false;
             Window.Position = Point.Zero;
 
             Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
@@ -76,6 +69,20 @@ namespace Test
             playerPosition = new Vector2(2 * 16, 31 * 16);
 
             base.Initialize();
+        }
+
+        void Window_ClientSizeChanged(object sender, EventArgs e)
+        {
+            _graphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            _graphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
+            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = _graphicsDeviceManager.PreferredBackBufferWidth;
+            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = _graphicsDeviceManager.PreferredBackBufferHeight;
+            _graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
+            _graphicsDeviceManager.ApplyChanges();
+
+            _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
+            _camera = new Camera2D(_viewportAdapter);
+            _camera.Zoom = zoom;
         }
 
         protected override void LoadContent()
@@ -121,10 +128,16 @@ namespace Test
                 _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
 
             if (keyboardState.IsKeyDown(Keys.R))
+            {
                 _camera.ZoomIn(zoomSpeed * deltaSeconds);
+                zoom = _camera.Zoom;
+            }
 
             if (keyboardState.IsKeyDown(Keys.F))
+            {
                 _camera.ZoomOut(zoomSpeed * deltaSeconds);
+                zoom = _camera.Zoom;
+            }
 
 
             velocity.X = 0;
@@ -180,10 +193,10 @@ namespace Test
 
             if (cameraFollow)
             {
-                _camera.Position = playerPosition - new Vector2(_camera.GetBoundingRectangle().Width, _camera.GetBoundingRectangle().Height) / 2 * _camera.Zoom;
+                _camera.Position = playerPosition + new Vector2(player.Width, player.Height) / 2 - new Vector2(_camera.GetBoundingRectangle().Width, _camera.GetBoundingRectangle().Height) / 2 * zoom;
                 var bounds = _camera.GetBoundingRectangle();
 
-                if (bounds.Width <= _tiledMap.WidthInPixels && bounds.Height <= _tiledMap.HeightInPixels)
+                if (Math.Floor(bounds.Width) <= _tiledMap.WidthInPixels && Math.Floor(bounds.Height) <= _tiledMap.HeightInPixels)
                 {
                     var adjustment = Vector2.Zero;
                     if (bounds.Top < 0)
