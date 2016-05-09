@@ -40,7 +40,7 @@ namespace lp
 
         public lpGame()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
+            _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = true };
             _graphicsDeviceManager.IsFullScreen = false;
             _graphicsDeviceManager.PreferredBackBufferWidth = (int)windowSize.X;
             _graphicsDeviceManager.PreferredBackBufferHeight = (int)windowSize.Y;
