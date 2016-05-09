@@ -18,7 +18,6 @@ namespace Test
         private FramesPerSecondCounterComponent _fpsCounter;
         private BitmapFont _bitmapFont;
         private Camera2D _camera;
-        // ReSharper disable once NotAccessedField.Local
         private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
@@ -33,48 +32,73 @@ namespace Test
         private bool isJumping = false;
         private bool cameraFollow = true;
         private float zoom = 4;
+        private bool windowDirty = false;
+        private bool wasDownF11 = false;
+        private static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+        private Vector2 windowSize = screenSize / 2;
+        private bool changingFullscreen = false;
 
         public Game1()
         {
-            
             _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
-            _graphicsDeviceManager.IsFullScreen = true;
-            _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphicsDeviceManager.IsFullScreen = false;
+            _graphicsDeviceManager.PreferredBackBufferWidth = (int)windowSize.X;
+            _graphicsDeviceManager.PreferredBackBufferHeight = (int)windowSize.Y;
 
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1 / 120.0f);
         }
 
         protected override void Initialize()
         {
-            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = _graphicsDeviceManager.PreferredBackBufferWidth;
-            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = _graphicsDeviceManager.PreferredBackBufferHeight;
-            _graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
-            _graphicsDeviceManager.ApplyChanges();
 
-            _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
-            _camera = new Camera2D(_viewportAdapter);
-            _camera.Zoom = zoom;
-
+            setGameSize(windowSize);
+            
+            Window.Position = Point.Zero;
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
-
-            Window.Position = Point.Zero;
 
             Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
 
             playerPosition = new Vector2(2 * 16, 31 * 16);
+
+            System.Diagnostics.Debug.WriteLine("Initialized.");
 
             base.Initialize();
         }
 
         void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            _graphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
-            _graphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
+            windowDirty = true;
+            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Width: {Window.ClientBounds.Width}");
+            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Height: {Window.ClientBounds.Height}");
+        }
+
+        void Window_HandleSizeChange()
+        {
+            if (!changingFullscreen)
+            {
+                windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+                setGameSize(windowSize);
+            }
+            else
+            {
+                setGameSize(new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height));
+            }
+            
+            windowDirty = false;
+        }
+
+        void setGameSize(Vector2 size)
+        {
+            _graphicsDeviceManager.PreferredBackBufferWidth = (int)size.X;
+            _graphicsDeviceManager.PreferredBackBufferHeight = (int)size.Y;
+
+            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Width: {Window.ClientBounds.Width}");
+            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Height: {Window.ClientBounds.Height}");
+
             _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = _graphicsDeviceManager.PreferredBackBufferWidth;
             _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = _graphicsDeviceManager.PreferredBackBufferHeight;
             _graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
@@ -182,6 +206,37 @@ namespace Test
 
 
 
+            if (keyboardState.IsKeyDown(Keys.Z))
+                playerPosition = new Vector2(2 * 16, 31 * 16);
+
+
+
+            if (keyboardState.IsKeyDown(Keys.F11))
+            {
+                if (!wasDownF11)
+                {
+                    changingFullscreen = true;
+                    if (_graphicsDeviceManager.IsFullScreen)
+                    {
+                        _graphicsDeviceManager.IsFullScreen = false;
+                        IsMouseVisible = true;
+                        setGameSize(windowSize);
+                    }
+                    else
+                    {
+                        _graphicsDeviceManager.IsFullScreen = true;
+                        IsMouseVisible = false;
+                        setGameSize(new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height));
+                    }
+                }
+                wasDownF11 = true;
+            }
+            else
+            {
+                wasDownF11 = false;
+            }
+
+
 
             foreach (var layer in _tiledMap.TileLayers)
             {
@@ -217,6 +272,12 @@ namespace Test
                     }
                     _camera.Move(adjustment);
                 }
+            }
+
+            if (windowDirty)
+            {
+                Window_HandleSizeChange();
+                changingFullscreen = false;
             }
 
 
