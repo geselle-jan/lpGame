@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/Test/Test/Content/montserrat-32.fnt</SourceFile>
+  <SourceTime>2016-04-28T13:08:48.2971943+02:00</SourceTime>
+  <DestFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/Test/Test/Content/bin/DesktopGL/montserrat-32.xnb</DestFile>
+  <DestTime>2016-04-28T16:33:01.143199+02:00</DestTime>
+  <Importer>BitmapFontImporter</Importer>
+  <ImporterTime>2016-04-08T11:54:30+02:00</ImporterTime>
+  <Processor>BitmapFontProcessor</Processor>
+  <ProcessorTime>2016-04-08T11:54:30+02:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

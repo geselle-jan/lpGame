@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/Test/Test/Content/test.tmx</SourceFile>
+  <SourceTime>2016-05-08T17:39:29.8032178+02:00</SourceTime>
+  <DestFile>C:/Users/gesel/Documents/Visual Studio 2015/Projects/Test/Test/Content/bin/DesktopGL/test.xnb</DestFile>
+  <DestTime>2016-05-08T17:39:32.7253552+02:00</DestTime>
+  <Importer>TiledMapImporter</Importer>
+  <ImporterTime>2016-04-08T11:54:30+02:00</ImporterTime>
+  <Processor>TiledMapProcessor</Processor>
+  <ProcessorTime>2016-04-08T11:54:30+02:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
