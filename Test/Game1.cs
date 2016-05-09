@@ -143,25 +143,25 @@ namespace Test
             velocity.X = 0;
 
             if (keyboardState.IsKeyDown(Keys.Right))
-                velocity.X = speed * deltaSeconds * 1;
+                velocity.X = speed * 1;
 
             if (keyboardState.IsKeyDown(Keys.Left))
-                velocity.X = speed * deltaSeconds * -1;
+                velocity.X = speed * -1;
 
             if (keyboardState.IsKeyDown(Keys.Up) && !isJumping)
             {
                 isJumping = true;
-                velocity.Y = 300 * deltaSeconds * -1;
+                velocity.Y = 300 * -1;
             }
 
 
 
 
-            velocity += new Vector2(0, gravity * deltaSeconds * 1);
+            velocity += new Vector2(0, gravity * 125 * deltaSeconds * 1);
 
 
-            playerPosition = playerPosition + velocity;
-            collide();
+            playerPosition = playerPosition + (velocity * deltaSeconds);
+            collide(deltaSeconds);
 
 
 
@@ -271,22 +271,23 @@ namespace Test
             base.Draw(gameTime);
         }
 
-        private void collide()
+        private void collide(float deltaSeconds)
         {
             var velocityX = new Vector2(velocity.X, 0);
             var velocityY = new Vector2(0, velocity.Y);
             if (checkCollision())
             {
-                playerPosition -= velocityX;
+                playerPosition -= velocityX * deltaSeconds;
                 if (checkCollision())
                 {
-                    playerPosition += velocityX;
-                    playerPosition -= velocityY;
+                    playerPosition += velocityX * deltaSeconds;
+                    playerPosition -= velocityY * deltaSeconds;
 
                     if (checkCollision())
                     {
-                        playerPosition += velocityY;
-                        playerPosition -= velocity;
+                        playerPosition -= velocityX * deltaSeconds;
+                        velocity.X = 0;
+                        velocity.Y = 0;
                     }
                     else
                     {
@@ -366,8 +367,8 @@ namespace Test
 
         private void drawBackground (SpriteBatch _spriteBatch)
         {
-            var height = GraphicsDevice.Viewport.Height;
-            var width = GraphicsDevice.Viewport.Width;
+            var height = _tiledMap.HeightInPixels;
+            var width = _tiledMap.WidthInPixels;
             var drawPosition = Vector2.Zero;
             var offset = _camera.Position / 2;
             var xDraws = width / backgroundImage.Width + 1;
