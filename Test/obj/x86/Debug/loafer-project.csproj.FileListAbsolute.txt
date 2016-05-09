@@ -1,0 +1,17 @@
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\obj\x86\Debug\Test.exe
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\obj\x86\Debug\Test.pdb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\collision.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\highlight.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\montserrat-32.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\montserrat-32_0.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\player.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\sr388cave.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\srx.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Content\test.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\OpenTK.dll.config
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Test.exe
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\Test.pdb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\MonoGame.Extended.dll
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\MonoGame.Framework.dll
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\NVorbis.dll
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\Test\Test\bin\DesktopGL\x86\Debug\OpenTK.dll

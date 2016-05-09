@@ -8,12 +8,12 @@ using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.ViewportAdapters;
 
-namespace Test
+namespace lp
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class lpGame : Game
     {
         private FramesPerSecondCounterComponent _fpsCounter;
         private BitmapFont _bitmapFont;
@@ -38,7 +38,7 @@ namespace Test
         private Vector2 windowSize = screenSize / 2;
         private bool changingFullscreen = false;
 
-        public Game1()
+        public lpGame()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = false };
             _graphicsDeviceManager.IsFullScreen = false;

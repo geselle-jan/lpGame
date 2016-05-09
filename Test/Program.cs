@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Test
+namespace lp
 {
     /// <summary>
     /// The main class.
@@ -13,7 +13,7 @@ namespace Test
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new lpGame())
                 game.Run();
         }
     }
