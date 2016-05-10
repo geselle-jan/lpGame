@@ -29,14 +29,16 @@ namespace lp
         private int speed = 100;
         private int gravity = 5;
         private Vector2 velocity = Vector2.Zero;
-        private bool isJumping = false;
+        private bool onGround = false;
         private bool cameraFollow = true;
         private float zoom = 4;
         private bool windowDirty = false;
         private bool wasDownF11 = false;
+        private bool wasDownJump = false;
         private static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         private Vector2 windowSize = screenSize / 2;
         private bool changingFullscreen = false;
+        private float deltaSeconds = 0f;
 
         public lpGame()
         {
@@ -129,7 +131,7 @@ namespace lp
 
         protected override void Update(GameTime gameTime)
         {
-            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
@@ -172,10 +174,19 @@ namespace lp
             if (keyboardState.IsKeyDown(Keys.Left))
                 velocity.X = speed * -1;
 
-            if (keyboardState.IsKeyDown(Keys.Up) && !isJumping)
+            if (onGround)
             {
-                isJumping = true;
-                velocity.Y = 300 * -1;
+                if (keyboardState.IsKeyDown(Keys.Up))
+                {
+                    if (!wasDownJump)
+                    {
+                        wasDownJump = true;
+                        velocity.Y = 300 * -1;
+                    }
+                } else
+                {
+                    wasDownJump = false;
+                }
             }
 
 
@@ -183,11 +194,13 @@ namespace lp
 
             velocity += new Vector2(0, gravity * 125 * deltaSeconds * 1);
 
+            playerPosition.Y = playerPosition.Y + (velocity.Y * deltaSeconds);
+            
+            collideY();
 
-            playerPosition = playerPosition + (velocity * deltaSeconds);
-            collide(deltaSeconds);
+            playerPosition.X = playerPosition.X + (velocity.X * deltaSeconds);
 
-
+            collideX();
 
 
             if (keyboardState.IsKeyDown(Keys.Q))
@@ -340,58 +353,51 @@ namespace lp
 
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-            _spriteBatch.DrawString(_bitmapFont, "debug1", new Vector2(5, 32), textColor);
-            _spriteBatch.DrawString(_bitmapFont, "debug2", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", new Vector2(5, 32), textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.AliceBlue);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void collide(float deltaSeconds)
+        private void collideY()
         {
-            var velocityX = new Vector2(velocity.X, 0);
             var velocityY = new Vector2(0, velocity.Y);
-            if (checkCollision())
+            var collisionY = checkCollisionY();
+            onGround = false;
+            if (collisionY != 0)
             {
-                playerPosition -= velocityX * deltaSeconds;
-                if (checkCollision())
+                if (collisionY > 0)
                 {
-                    playerPosition += velocityX * deltaSeconds;
-                    playerPosition -= velocityY * deltaSeconds;
+                    onGround = true;
+                }
 
-                    if (checkCollision())
-                    {
-                        playerPosition -= velocityX * deltaSeconds;
-                        velocity.X = 0;
-                        velocity.Y = 0;
-                    }
-                    else
-                    {
-                        if (velocity.Y > 0)
-                        {
-                            isJumping = false;
-                        }
-                        velocity.Y = 0;
-                    }
-                }
-                else
-                {
-                    velocity.X = 0;
-                }
+                velocity.Y = 0;
+                playerPosition.Y -= collisionY;
             }
         }
 
-        private bool checkCollision()
+        private void collideX()
         {
-            var collisions = 0;
+            var velocityX = new Vector2(0, velocity.X);
+            var collisionX = checkCollisionX();
+            if (collisionX != 0)
+            {
+                playerPosition.X -= collisionX;
+            }
+        }
+
+        private float checkCollisionY()
+        {
+            var collisionY = 0f;
             foreach (var tileLayer in _tiledMap.TileLayers)
             {
                 if (tileLayer.Name == "collision")
                 {
-                    var tileSize = 16;
-                    var playerHeight = 32;
-                    var playerWidth = 16;
+                    var tileSize = _tiledMap.TileHeight;
+                    var playerHeight = player.Height;
+                    var playerWidth = player.Width;
                     var currentX = 0;
                     var currentY = 0;
 
@@ -420,7 +426,22 @@ namespace lp
                             if (tileID != 0)
                             {
                                 //_spriteBatch.Draw(highlight, new Vector2(playerX * tileSize, playerY * tileSize));
-                                collisions++;
+                                if (velocity.Y > 0) // falling down
+                                {
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize);
+                                    if (intersection > collisionY)
+                                    {
+                                        collisionY = intersection;
+                                    }
+                                }
+                                else // jumping
+                                {
+                                    var intersection = (playerPosition.Y) - ((playerY * tileSize) + tileSize);
+                                    if (intersection < collisionY)
+                                    {
+                                        collisionY = intersection;
+                                    }
+                                }
                             }
 
                             currentY = currentY + tileSize;
@@ -432,14 +453,75 @@ namespace lp
                 }
             }
 
-            return collisions != 0;
+            return collisionY;
         }
 
-        private Vector2 roundPosition (Vector2 position)
+        private float checkCollisionX()
         {
-            position.X = (float)Math.Round(position.X);
-            position.Y = (float)Math.Round(position.Y);
-            return position;
+            var collisionX = 0f;
+            foreach (var tileLayer in _tiledMap.TileLayers)
+            {
+                if (tileLayer.Name == "collision")
+                {
+                    var tileSize = _tiledMap.TileHeight;
+                    var playerHeight = player.Height;
+                    var playerWidth = player.Width;
+                    var currentX = 0;
+                    var currentY = 0;
+
+
+                    while (currentX <= playerWidth)
+                    {
+                        while (currentY <= playerHeight)
+                        {
+                            var playerX = (int)Math.Floor((playerPosition.X + currentX) / tileSize);
+                            var playerY = (int)Math.Floor((playerPosition.Y + currentY) / tileSize);
+
+                            if (currentX == playerWidth && playerPosition.X % tileSize == 0)
+                            {
+                                break;
+                            }
+
+                            if (currentY == playerHeight && playerPosition.Y % tileSize == 0)
+                            {
+                                break;
+                            }
+
+                            var tileID = tileLayer.GetTile(
+                                playerX,
+                                playerY
+                            ).Id;
+                            if (tileID != 0)
+                            {
+                                //_spriteBatch.Draw(highlight, new Vector2(playerX * tileSize, playerY * tileSize));
+                                if (velocity.X > 0) // going right
+                                {
+                                    var intersection = (playerPosition.X + playerWidth) - (playerX * tileSize);
+                                    if (intersection > collisionX)
+                                    {
+                                        collisionX = intersection;
+                                    }
+                                }
+                                else // going left
+                                {
+                                    var intersection = (playerPosition.X) - ((playerX * tileSize) + tileSize);
+                                    if (intersection < collisionX)
+                                    {
+                                        collisionX = intersection;
+                                    }
+                                }
+                            }
+
+                            currentY = currentY + tileSize;
+                        }
+
+                        currentY = 0;
+                        currentX = currentX + tileSize;
+                    }
+                }
+            }
+
+            return collisionX;
         }
 
         private void drawBackground (SpriteBatch _spriteBatch)
