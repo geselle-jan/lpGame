@@ -26,7 +26,7 @@ namespace lp
         private Texture2D highlight;
         private Texture2D backgroundImage;
         private Vector2 playerPosition;
-        private Vector2 spawnPosition = new Vector2(29 * 16, 15 * 16);
+        private Vector2 spawnPosition = new Vector2(2 * 16, 31 * 16);
         private int speed = 120;
         private int acceleration = 900;
         private int jumpSpeed = 290;
@@ -34,6 +34,8 @@ namespace lp
         private int gravity = 600;
         private Vector2 velocity = Vector2.Zero;
         private bool onGround = false;
+        private bool wasOnSlope = false;
+        private bool isOnSlope = false;
         private bool cameraFollow = true;
         private float zoom = 4;
         private bool windowDirty = false;
@@ -79,8 +81,6 @@ namespace lp
         void Window_ClientSizeChanged(object sender, EventArgs e)
         {
             windowDirty = true;
-            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Width: {Window.ClientBounds.Width}");
-            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Height: {Window.ClientBounds.Height}");
         }
 
         void Window_HandleSizeChange()
@@ -399,6 +399,8 @@ namespace lp
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
             _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", new Vector2(5, 32), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"onGround: {onGround}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), textColor);
+            _spriteBatch.DrawString(_bitmapFont, $"isOnSlope: {isOnSlope}", new Vector2(5, 32 + _bitmapFont.LineHeight * 3), textColor);
             _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.AliceBlue);
             _spriteBatch.End();
 
@@ -408,7 +410,13 @@ namespace lp
         private void collideY()
         {
             var velocityY = new Vector2(0, velocity.Y);
+            isOnSlope = false;
             var collisionY = checkCollisionY();
+            if (wasOnSlope && !isOnSlope)
+            {
+                playerPosition.Y += 1;
+                collisionY = checkCollisionY();
+            }
             onGround = false;
             if (collisionY != 0)
             {
@@ -420,6 +428,7 @@ namespace lp
                 velocity.Y = 0;
                 playerPosition.Y -= collisionY;
             }
+            wasOnSlope = isOnSlope;
         }
 
         private void collideX()
@@ -444,6 +453,7 @@ namespace lp
                     var playerWidth = player.Width;
                     var currentX = 0;
                     var currentY = 0;
+                    var highHalfSlopeCollided = false;
 
 
                     while (currentX <= playerWidth)
@@ -467,7 +477,7 @@ namespace lp
                                 playerX,
                                 playerY
                             ).Id;
-                            if (tileID != 0)
+                            if (tileID == 1)
                             {
                                 //_spriteBatch.Draw(highlight, new Vector2(playerX * tileSize, playerY * tileSize));
                                 if (velocity.Y > 0) // falling down
@@ -483,6 +493,186 @@ namespace lp
                                     var intersection = (playerPosition.Y) - ((playerY * tileSize) + tileSize);
                                     if (intersection < collisionY)
                                     {
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 2)
+                            {
+                                if (velocity.Y > 0) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerPosition.X + playerWidth - playerX * tileSize);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 3)
+                            {
+                                if (velocity.Y > 0) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerX * tileSize + tileSize - playerPosition.X);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 4)
+                            {
+                                if (velocity.Y > 0 && !highHalfSlopeCollided) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerPosition.X + playerWidth - playerX * tileSize);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    highestPointUnderPlayer = highestPointUnderPlayer / 2 + tileSize / 2;
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 5)
+                            {
+                                if (velocity.Y > 0) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerPosition.X + playerWidth - playerX * tileSize);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    highestPointUnderPlayer = highestPointUnderPlayer / 2;
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        highHalfSlopeCollided = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 6)
+                            {
+                                if (velocity.Y > 0) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerX * tileSize + tileSize - playerPosition.X);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    highestPointUnderPlayer = highestPointUnderPlayer / 2;
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        highHalfSlopeCollided = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
+                                        collisionY = intersection;
+                                    }
+                                }
+                            }
+                            else if (tileID == 7)
+                            {
+                                if (velocity.Y > 0 && !highHalfSlopeCollided) // falling down
+                                {
+                                    var highestPointUnderPlayer = tileSize - (playerX * tileSize + tileSize - playerPosition.X);
+                                    if (highestPointUnderPlayer < 0)
+                                    {
+                                        highestPointUnderPlayer = 0;
+                                    }
+                                    if (highestPointUnderPlayer > tileSize)
+                                    {
+                                        highestPointUnderPlayer = tileSize;
+                                    }
+                                    highestPointUnderPlayer = highestPointUnderPlayer / 2 + tileSize / 2;
+                                    var intersection = (playerPosition.Y + playerHeight) - (playerY * tileSize) - highestPointUnderPlayer;
+
+                                    if (onGround && highestPointUnderPlayer != 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
+                                        playerPosition.Y = playerPosition.Y - intersection + 1;
+                                        isOnSlope = true;
+                                        collisionY = 1f;
+                                    }
+                                    else if (intersection > collisionY)
+                                    {
+                                        isOnSlope = true;
                                         collisionY = intersection;
                                     }
                                 }
@@ -535,7 +725,7 @@ namespace lp
                                 playerX,
                                 playerY
                             ).Id;
-                            if (tileID != 0)
+                            if (tileID == 1)
                             {
                                 //_spriteBatch.Draw(highlight, new Vector2(playerX * tileSize, playerY * tileSize));
                                 if (velocity.X > 0) // going right
