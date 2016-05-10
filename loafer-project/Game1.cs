@@ -26,15 +26,20 @@ namespace lp
         private Texture2D highlight;
         private Texture2D backgroundImage;
         private Vector2 playerPosition;
-        private int speed = 100;
-        private int gravity = 5;
+        private Vector2 spawnPosition = new Vector2(29 * 16, 15 * 16);
+        private int speed = 120;
+        private int acceleration = 900;
+        private int jumpSpeed = 290;
+        private int jumpAbortSpeed = 70;
+        private int gravity = 600;
         private Vector2 velocity = Vector2.Zero;
         private bool onGround = false;
         private bool cameraFollow = true;
         private float zoom = 4;
         private bool windowDirty = false;
         private bool wasDownF11 = false;
-        private bool wasDownJump = false;
+        private bool jumpAborted = false;
+        private bool canJump = true;
         private static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         private Vector2 windowSize = screenSize / 2;
         private bool changingFullscreen = false;
@@ -64,7 +69,7 @@ namespace lp
 
             Components.Add(_fpsCounter = new FramesPerSecondCounterComponent(this));
 
-            playerPosition = new Vector2(2 * 16, 31 * 16);
+            playerPosition = spawnPosition;
 
             System.Diagnostics.Debug.WriteLine("Initialized.");
 
@@ -166,33 +171,72 @@ namespace lp
             }
 
 
-            velocity.X = 0;
 
             if (keyboardState.IsKeyDown(Keys.Right))
-                velocity.X = speed * 1;
-
+            {
+                if (velocity.X < 0)
+                {
+                    velocity.X = 0;
+                }
+                if (velocity.X < speed)
+                {
+                    velocity.X += acceleration * deltaSeconds;
+                }
+                if (velocity.X > speed)
+                {
+                    velocity.X = speed;
+                }
+            }
+            
             if (keyboardState.IsKeyDown(Keys.Left))
-                velocity.X = speed * -1;
+            {
+                if (velocity.X > 0)
+                {
+                    velocity.X = 0;
+                }
+                if (velocity.X > -speed)
+                {
+                    velocity.X += -acceleration * deltaSeconds;
+                }
+                if (velocity.X < -speed)
+                {
+                    velocity.X = -speed;
+                }
+            }
+
+            if (!keyboardState.IsKeyDown(Keys.Right) && !keyboardState.IsKeyDown(Keys.Left))
+            {
+                velocity.X = 0;
+            }
 
             if (onGround)
             {
                 if (keyboardState.IsKeyDown(Keys.Up))
                 {
-                    if (!wasDownJump)
+                    if (canJump)
                     {
-                        wasDownJump = true;
-                        velocity.Y = 300 * -1;
+                        canJump = false;
+                        jumpAborted = false;
+                        velocity.Y = jumpSpeed * -1;
                     }
                 } else
                 {
-                    wasDownJump = false;
+                    canJump = true;
+                }
+            } else
+            {
+                if (!canJump && !jumpAborted && !keyboardState.IsKeyDown(Keys.Up))
+                {
+                    jumpAborted = true;
+                    if (velocity.Y < -jumpAbortSpeed)
+                    {
+                        velocity.Y = -jumpAbortSpeed;
+                    }
                 }
             }
 
 
-
-
-            velocity += new Vector2(0, gravity * 125 * deltaSeconds * 1);
+            velocity += new Vector2(0, gravity * deltaSeconds * 1);
 
             playerPosition.Y = playerPosition.Y + (velocity.Y * deltaSeconds);
             
@@ -220,7 +264,7 @@ namespace lp
 
 
             if (keyboardState.IsKeyDown(Keys.Z))
-                playerPosition = new Vector2(2 * 16, 31 * 16);
+                playerPosition = spawnPosition;
 
 
 
