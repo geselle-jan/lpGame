@@ -26,11 +26,6 @@
 /processorParam:TextureFormat=Color
 /build:collision.png
 
-#begin montserrat-32.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/build:montserrat-32.fnt
-
 #begin sr388cave.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -59,18 +54,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:test.tmx
-
-#begin montserrat-32_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:montserrat-32_0.png
 
 #begin player.png
 /importer:TextureImporter
@@ -131,4 +114,38 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:yellow.png
+
+#begin emulogic-16.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:emulogic-16.fnt
+
+#begin emulogic-16_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:emulogic-16_0.png
+
+#begin emulogic-8.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:emulogic-8.fnt
+
+#begin emulogic-8_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:emulogic-8_0.png
 

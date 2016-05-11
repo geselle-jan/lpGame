@@ -19,8 +19,6 @@ C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\obj\x
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\obj\x86\Debug\Test.pdb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\collision.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\highlight.xnb
-C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\montserrat-32.xnb
-C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\montserrat-32_0.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\player.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\sr388cave.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\srx.xnb
@@ -36,3 +34,7 @@ C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\obj\x
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\corridor1.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\debug.xnb
 C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\yellow.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\emulogic-16.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\emulogic-16_0.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\emulogic-8.xnb
+C:\Users\gesel\Documents\Visual Studio 2015\Projects\lpGame\loafer-project\bin\DesktopGL\x86\Debug\Content\emulogic-8_0.xnb

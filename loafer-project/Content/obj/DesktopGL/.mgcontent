@@ -5,15 +5,17 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/collision.png</File>
-    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/montserrat-32.fnt</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/sr388cave.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/srx.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/test.tmx</File>
-    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/montserrat-32_0.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/player.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/highlight.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/corridor1.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/debug.png</File>
     <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/yellow.png</File>
+    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/emulogic-16.fnt</File>
+    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/emulogic-16_0.png</File>
+    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/emulogic-8.fnt</File>
+    <File>C:/Users/gesel/Documents/Visual Studio 2015/Projects/lpGame/loafer-project/Content/emulogic-8_0.png</File>
   </SourceFiles>
 </SourceFileCollection>

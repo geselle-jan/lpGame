@@ -25,6 +25,8 @@ namespace lp
         private Texture2D player;
         private Texture2D highlight;
         private Texture2D backgroundImage;
+        private Texture2D debugOuter;
+        private Texture2D debugInner;
         private Vector2 playerPosition;
         private Vector2 spawnPosition = new Vector2(2 * 16, 31 * 16);
         private int speed = 120;
@@ -40,12 +42,14 @@ namespace lp
         private float zoom = 4;
         private bool windowDirty = false;
         private bool wasDownF11 = false;
+        private bool wasDownDebug = false;
         private bool jumpAborted = false;
         private bool canJump = true;
         private static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         private Vector2 windowSize = screenSize / 2;
         private bool changingFullscreen = false;
         private float deltaSeconds = 0f;
+        private bool showDebug = false;
 
         public lpGame()
         {
@@ -119,7 +123,7 @@ namespace lp
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _bitmapFont = Content.Load<BitmapFont>("montserrat-32");
+            _bitmapFont = Content.Load<BitmapFont>("emulogic-8");
 
             _tiledMap = Content.Load<TiledMap>("test");
 
@@ -128,6 +132,9 @@ namespace lp
             highlight = Content.Load<Texture2D>("highlight");
 
             backgroundImage = Content.Load<Texture2D>("sr388cave");
+
+            debugOuter = getDrawRectangle(16 * 12, 16 + _bitmapFont.LineHeight * 5, Color.LimeGreen);
+            debugInner = getDrawRectangle(16 * 12 - 2, 16 + _bitmapFont.LineHeight * 5 - 2, Color.Black);
         }
 
         protected override void UnloadContent()
@@ -295,6 +302,21 @@ namespace lp
 
 
 
+            if (keyboardState.IsKeyDown(Keys.I))
+            {
+                if (!wasDownDebug)
+                {
+                    showDebug = !showDebug;
+                }
+                wasDownDebug = true;
+            }
+            else
+            {
+                wasDownDebug = false;
+            }
+
+
+
             foreach (var layer in _tiledMap.TileLayers)
             {
                 if (layer.Name == "collision")
@@ -345,7 +367,7 @@ namespace lp
         {
             GraphicsDevice.Clear(_tiledMap.BackgroundColor ?? Color.Black);
 
-            var textColor = Color.White;
+            var textColor = Color.LimeGreen;
 
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
 
@@ -396,15 +418,38 @@ namespace lp
             _spriteBatch.End();
 
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-            _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", new Vector2(5, 32), textColor);
-            _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", new Vector2(5, 32 + _bitmapFont.LineHeight), textColor);
-            _spriteBatch.DrawString(_bitmapFont, $"onGround: {onGround}", new Vector2(5, 32 + _bitmapFont.LineHeight * 2), textColor);
-            _spriteBatch.DrawString(_bitmapFont, $"isOnSlope: {isOnSlope}", new Vector2(5, 32 + _bitmapFont.LineHeight * 3), textColor);
-            _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", Vector2.One, Color.AliceBlue);
-            _spriteBatch.End();
+            if (showDebug && _graphicsDeviceManager.GraphicsDevice != null)
+            {
+                _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+                _spriteBatch.Draw(debugOuter, fixedToCamera(Vector2.Zero));
+                _spriteBatch.Draw(debugInner, fixedToCamera(Vector2.One));
+                _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", fixedToCamera(new Vector2(8, 8)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 1)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 2)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"onGround: {onGround}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 3)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"isOnSlope: {isOnSlope}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 4)), textColor);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
+        }
+
+        private Texture2D getDrawRectangle (int width, int height, Color color)
+        {
+            Texture2D rect = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
+
+            Color[] data = new Color[width * height];
+            for (int i = 0; i < data.Length; ++i) data[i] = color;
+            rect.SetData(data);
+
+            return rect;
+        }
+
+        private Vector2 fixedToCamera(Vector2 fixedPosition)
+        {
+            var bounds = _camera.GetBoundingRectangle();
+            var realPosition = fixedPosition + new Vector2(bounds.Left, bounds.Top);
+            return realPosition;
         }
 
         private void collideY()
