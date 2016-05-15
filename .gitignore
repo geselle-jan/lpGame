@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# build files
+loafer-project/bin
+loafer-project/obj
+loafer-project/Content/bin
+loafer-project/Content/obj
