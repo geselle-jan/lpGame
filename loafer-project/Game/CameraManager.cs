@@ -13,17 +13,36 @@ namespace lp
         public Camera2D instance;
 
         public float zoom = 4;
+        public Entity follow;
 
         public CameraManager(lpGame lpGame)
         {
             game = lpGame;
         }
 
-        public void init ()
+        public void init()
         {
             viewportAdapter = new DefaultViewportAdapter(game.graphicsDeviceManager.GraphicsDevice);
             instance = new Camera2D(viewportAdapter);
             instance.Zoom = zoom;
+        }
+
+        public void followEntity(Entity entity)
+        {
+            follow = entity;
+        }
+
+        public void unfollowEntity()
+        {
+            follow = null;
+        }
+
+        public void update(float deltaSeconds)
+        {
+            if (follow != null)
+            {
+                focus(follow.position + follow.size / 2);
+            }
         }
 
         public void move(Vector2 vector)

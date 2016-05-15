@@ -40,7 +40,15 @@
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="Game\CameraManager.cs" />
+    <Compile Include="Game\Debug.cs" />
+    <Compile Include="Game\Entity.cs" />
+    <Compile Include="Game\Graphics.cs" />
     <Compile Include="Game\InputManager.cs" />
+    <Compile Include="Game\Level.cs" />
+    <Compile Include="Game\Level\Level_Test.cs" />
+    <Compile Include="Game\Physics.cs" />
+    <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\WindowManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
