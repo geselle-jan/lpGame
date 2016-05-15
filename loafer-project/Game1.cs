@@ -1,12 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
-using MonoGame.Extended.ViewportAdapters;
+using Microsoft.Xna.Framework.Audio;
 
 namespace lp
 {
@@ -17,11 +16,8 @@ namespace lp
     {
         private FramesPerSecondCounterComponent _fpsCounter;
         private BitmapFont _bitmapFont;
-        private Camera2D _camera;
-        private GraphicsDeviceManager _graphicsDeviceManager;
         private SpriteBatch _spriteBatch;
         private TiledMap _tiledMap;
-        private ViewportAdapter _viewportAdapter;
         private Texture2D player;
         private Texture2D highlight;
         private Texture2D backgroundImage;
@@ -39,10 +35,7 @@ namespace lp
         private bool wasOnSlope = false;
         private bool isOnSlope = false;
         private bool cameraFollow = true;
-        private float zoom = 4;
         private bool windowDirty = false;
-        private bool wasDownF11 = false;
-        private bool wasDownDebug = false;
         private bool jumpAborted = false;
         private bool canJump = true;
         private static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
@@ -50,13 +43,29 @@ namespace lp
         private bool changingFullscreen = false;
         private float deltaSeconds = 0f;
         private bool showDebug = false;
+        //private SoundEffect song;
+
+
+
+
+        public lpGame game;
+        public GraphicsDeviceManager graphicsDeviceManager;
+        public InputManager input;
+        public CameraManager camera;
+
+        public Vector2 currentBounds;
+
 
         public lpGame()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = true };
-            _graphicsDeviceManager.IsFullScreen = false;
-            _graphicsDeviceManager.PreferredBackBufferWidth = (int)windowSize.X;
-            _graphicsDeviceManager.PreferredBackBufferHeight = (int)windowSize.Y;
+            game = this;
+            graphicsDeviceManager = new GraphicsDeviceManager(this) { SynchronizeWithVerticalRetrace = true };
+            input = new InputManager(game);
+            camera = new CameraManager(game);
+            
+            graphicsDeviceManager.IsFullScreen = false;
+            graphicsDeviceManager.PreferredBackBufferWidth = (int)windowSize.X;
+            graphicsDeviceManager.PreferredBackBufferHeight = (int)windowSize.Y;
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -66,7 +75,6 @@ namespace lp
 
         protected override void Initialize()
         {
-
             setGameSize(windowSize);
             
             Window.Position = Point.Zero;
@@ -104,20 +112,18 @@ namespace lp
 
         void setGameSize(Vector2 size)
         {
-            _graphicsDeviceManager.PreferredBackBufferWidth = (int)size.X;
-            _graphicsDeviceManager.PreferredBackBufferHeight = (int)size.Y;
+            graphicsDeviceManager.PreferredBackBufferWidth = (int)size.X;
+            graphicsDeviceManager.PreferredBackBufferHeight = (int)size.Y;
 
             System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Width: {Window.ClientBounds.Width}");
             System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Height: {Window.ClientBounds.Height}");
 
-            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = _graphicsDeviceManager.PreferredBackBufferWidth;
-            _graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = _graphicsDeviceManager.PreferredBackBufferHeight;
-            _graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, _graphicsDeviceManager.PreferredBackBufferWidth, _graphicsDeviceManager.PreferredBackBufferHeight);
-            _graphicsDeviceManager.ApplyChanges();
+            graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = graphicsDeviceManager.PreferredBackBufferWidth;
+            graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = graphicsDeviceManager.PreferredBackBufferHeight;
+            graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, graphicsDeviceManager.PreferredBackBufferWidth, graphicsDeviceManager.PreferredBackBufferHeight);
+            graphicsDeviceManager.ApplyChanges();
 
-            _viewportAdapter = new DefaultViewportAdapter(GraphicsDevice);
-            _camera = new Camera2D(_viewportAdapter);
-            _camera.Zoom = zoom;
+            camera.init();
         }
 
         protected override void LoadContent()
@@ -127,11 +133,19 @@ namespace lp
 
             _tiledMap = Content.Load<TiledMap>("test");
 
+            currentBounds = new Vector2(_tiledMap.WidthInPixels, _tiledMap.HeightInPixels);
+
             player = Content.Load<Texture2D>("player");
 
             highlight = Content.Load<Texture2D>("highlight");
 
             backgroundImage = Content.Load<Texture2D>("sr388cave");
+
+
+            //song = Content.Load<SoundEffect>("generic01");
+            //var songInstance = song.CreateInstance();
+            //songInstance.IsLooped = true;
+            //songInstance.Play();
 
             debugOuter = getDrawRectangle(16 * 12, 16 + _bitmapFont.LineHeight * 5, Color.LimeGreen);
             debugInner = getDrawRectangle(16 * 12 - 2, 16 + _bitmapFont.LineHeight * 5 - 2, Color.Black);
@@ -144,42 +158,41 @@ namespace lp
         protected override void Update(GameTime gameTime)
         {
             deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var keyboardState = Keyboard.GetState();
-            var mouseState = Mouse.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
+
+            game.input.update();
+
+            if (game.input.menuJustPressed)
                 Exit();
 
             const float cameraSpeed = 400f;
             const float zoomSpeed = 0.8f;
 
-            if (keyboardState.IsKeyDown(Keys.W))
-                _camera.Move(new Vector2(0, -cameraSpeed) * deltaSeconds);
+            if (game.input.cameraUpPressed)
+                camera.move(new Vector2(0, -cameraSpeed) * deltaSeconds);
 
-            if (keyboardState.IsKeyDown(Keys.A))
-                _camera.Move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
+            if (game.input.cameraLeftPressed)
+                camera.move(new Vector2(-cameraSpeed, 0) * deltaSeconds);
 
-            if (keyboardState.IsKeyDown(Keys.S))
-                _camera.Move(new Vector2(0, cameraSpeed) * deltaSeconds);
+            if (game.input.cameraDownPressed)
+                camera.move(new Vector2(0, cameraSpeed) * deltaSeconds);
 
-            if (keyboardState.IsKeyDown(Keys.D))
-                _camera.Move(new Vector2(cameraSpeed, 0) * deltaSeconds);
+            if (game.input.cameraRightPressed)
+                camera.move(new Vector2(cameraSpeed, 0) * deltaSeconds);
 
-            if (keyboardState.IsKeyDown(Keys.R))
+            if (game.input.zoomInPressed)
             {
-                _camera.ZoomIn(zoomSpeed * deltaSeconds);
-                zoom = _camera.Zoom;
+                camera.zoomIn(zoomSpeed * deltaSeconds);
             }
 
-            if (keyboardState.IsKeyDown(Keys.F))
+            if (game.input.zoomOutPressed)
             {
-                _camera.ZoomOut(zoomSpeed * deltaSeconds);
-                zoom = _camera.Zoom;
+                camera.zoomOut(zoomSpeed * deltaSeconds);
             }
 
 
 
-            if (keyboardState.IsKeyDown(Keys.Right))
+            if (game.input.rightPressed)
             {
                 if (velocity.X < 0)
                 {
@@ -195,7 +208,7 @@ namespace lp
                 }
             }
             
-            if (keyboardState.IsKeyDown(Keys.Left))
+            if (game.input.leftPressed)
             {
                 if (velocity.X > 0)
                 {
@@ -211,14 +224,19 @@ namespace lp
                 }
             }
 
-            if (!keyboardState.IsKeyDown(Keys.Right) && !keyboardState.IsKeyDown(Keys.Left))
+            if (!game.input.rightPressed && !game.input.leftPressed)
+            {
+                velocity.X = 0;
+            }
+
+            if (game.input.rightPressed && game.input.leftPressed)
             {
                 velocity.X = 0;
             }
 
             if (onGround)
             {
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (game.input.jumpPressed)
                 {
                     if (canJump)
                     {
@@ -232,7 +250,7 @@ namespace lp
                 }
             } else
             {
-                if (!canJump && !jumpAborted && !keyboardState.IsKeyDown(Keys.Up))
+                if (!canJump && !jumpAborted && !game.input.jumpPressed)
                 {
                     jumpAborted = true;
                     if (velocity.Y < -jumpAbortSpeed)
@@ -254,66 +272,39 @@ namespace lp
             collideX();
 
 
-            if (keyboardState.IsKeyDown(Keys.Q))
-                speed = 10;
-
-            if (keyboardState.IsKeyDown(Keys.E))
-                speed = 100;
 
 
-
-            if (keyboardState.IsKeyDown(Keys.T))
-                cameraFollow = true;
-
-            if (keyboardState.IsKeyDown(Keys.Y))
-                cameraFollow = false;
+            if (game.input.toggleTrackingJustPressed)
+                cameraFollow = !cameraFollow;
 
 
 
-            if (keyboardState.IsKeyDown(Keys.Z))
+            if (game.input.resetPlayerJustPressed)
                 playerPosition = spawnPosition;
 
 
 
-            if (keyboardState.IsKeyDown(Keys.F11))
+            if (game.input.toggleFullscreenJustPressed)
             {
-                if (!wasDownF11)
+                changingFullscreen = true;
+                if (graphicsDeviceManager.IsFullScreen)
                 {
-                    changingFullscreen = true;
-                    if (_graphicsDeviceManager.IsFullScreen)
-                    {
-                        _graphicsDeviceManager.IsFullScreen = false;
-                        IsMouseVisible = true;
-                        setGameSize(windowSize);
-                    }
-                    else
-                    {
-                        _graphicsDeviceManager.IsFullScreen = true;
-                        IsMouseVisible = false;
-                        setGameSize(new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height));
-                    }
+                    graphicsDeviceManager.IsFullScreen = false;
+                    IsMouseVisible = true;
+                    setGameSize(windowSize);
                 }
-                wasDownF11 = true;
-            }
-            else
-            {
-                wasDownF11 = false;
-            }
-
-
-
-            if (keyboardState.IsKeyDown(Keys.I))
-            {
-                if (!wasDownDebug)
+                else
                 {
-                    showDebug = !showDebug;
+                    graphicsDeviceManager.IsFullScreen = true;
+                    IsMouseVisible = false;
+                    setGameSize(new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height));
                 }
-                wasDownDebug = true;
             }
-            else
-            {
-                wasDownDebug = false;
-            }
+
+
+
+            if (game.input.toggleDebugJustPressed)
+                showDebug = !showDebug;
 
 
 
@@ -327,30 +318,7 @@ namespace lp
 
             if (cameraFollow)
             {
-                _camera.Position = playerPosition + new Vector2(player.Width, player.Height) / 2 - new Vector2(_camera.GetBoundingRectangle().Width, _camera.GetBoundingRectangle().Height) / 2 * zoom;
-                var bounds = _camera.GetBoundingRectangle();
-
-                if (Math.Floor(bounds.Width) <= _tiledMap.WidthInPixels && Math.Floor(bounds.Height) <= _tiledMap.HeightInPixels)
-                {
-                    var adjustment = Vector2.Zero;
-                    if (bounds.Top < 0)
-                    {
-                        adjustment.Y = bounds.Top * -1;
-                    }
-                    if (bounds.Bottom > _tiledMap.HeightInPixels)
-                    {
-                        adjustment.Y = (bounds.Bottom - _tiledMap.HeightInPixels) * -1;
-                    }
-                    if (bounds.Right > _tiledMap.WidthInPixels)
-                    {
-                        adjustment.X = (bounds.Right - _tiledMap.WidthInPixels) * -1;
-                    }
-                    if (bounds.Left < 0)
-                    {
-                        adjustment.X = bounds.Left * -1;
-                    }
-                    _camera.Move(adjustment);
-                }
+                camera.focus(playerPosition + new Vector2(player.Width, player.Height) / 2);
             }
 
             if (windowDirty)
@@ -369,7 +337,7 @@ namespace lp
 
             var textColor = Color.LimeGreen;
 
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(transformMatrix: game.camera.getViewMatrix(), samplerState: SamplerState.PointClamp);
 
             drawBackground(_spriteBatch);
 
@@ -385,7 +353,7 @@ namespace lp
             {
                 if (layer.Name == "background2")
                 {
-                    _spriteBatch.Draw(layer, _camera);
+                    _spriteBatch.Draw(layer, game.camera.instance);
                 }
             }
 
@@ -393,7 +361,7 @@ namespace lp
             {
                 if (layer.Name == "background1")
                 {
-                    _spriteBatch.Draw(layer, _camera);
+                    _spriteBatch.Draw(layer, game.camera.instance);
                 }
             }
 
@@ -403,7 +371,7 @@ namespace lp
             {
                 if (layer.Name == "foreground2")
                 {
-                    _spriteBatch.Draw(layer, _camera);
+                    _spriteBatch.Draw(layer, game.camera.instance);
                 }
             }
 
@@ -411,23 +379,23 @@ namespace lp
             {
                 if (layer.Name == "foreground1")
                 {
-                    _spriteBatch.Draw(layer, _camera);
+                    _spriteBatch.Draw(layer, game.camera.instance);
                 }
             }
 
             _spriteBatch.End();
 
 
-            if (showDebug && _graphicsDeviceManager.GraphicsDevice != null)
+            if (showDebug && graphicsDeviceManager.GraphicsDevice != null)
             {
-                _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
-                _spriteBatch.Draw(debugOuter, fixedToCamera(Vector2.Zero));
-                _spriteBatch.Draw(debugInner, fixedToCamera(Vector2.One));
-                _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", fixedToCamera(new Vector2(8, 8)), textColor);
-                _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 1)), textColor);
-                _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 2)), textColor);
-                _spriteBatch.DrawString(_bitmapFont, $"onGround: {onGround}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 3)), textColor);
-                _spriteBatch.DrawString(_bitmapFont, $"isOnSlope: {isOnSlope}", fixedToCamera(new Vector2(8, 8 + _bitmapFont.LineHeight * 4)), textColor);
+                _spriteBatch.Begin(transformMatrix: game.camera.getViewMatrix(), samplerState: SamplerState.PointClamp, blendState: BlendState.AlphaBlend);
+                _spriteBatch.Draw(debugOuter, game.camera.getFixedPositionFor(Vector2.Zero));
+                _spriteBatch.Draw(debugInner, game.camera.getFixedPositionFor(Vector2.One));
+                _spriteBatch.DrawString(_bitmapFont, $"FPS: {_fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"Velocity X: {velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + _bitmapFont.LineHeight * 1)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"Velocity Y: {velocity.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + _bitmapFont.LineHeight * 2)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"onGround: {onGround}", game.camera.getFixedPositionFor(new Vector2(8, 8 + _bitmapFont.LineHeight * 3)), textColor);
+                _spriteBatch.DrawString(_bitmapFont, $"isOnSlope: {isOnSlope}", game.camera.getFixedPositionFor(new Vector2(8, 8 + _bitmapFont.LineHeight * 4)), textColor);
                 _spriteBatch.End();
             }
 
@@ -436,20 +404,13 @@ namespace lp
 
         private Texture2D getDrawRectangle (int width, int height, Color color)
         {
-            Texture2D rect = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
+            Texture2D rect = new Texture2D(graphicsDeviceManager.GraphicsDevice, width, height);
 
             Color[] data = new Color[width * height];
             for (int i = 0; i < data.Length; ++i) data[i] = color;
             rect.SetData(data);
 
             return rect;
-        }
-
-        private Vector2 fixedToCamera(Vector2 fixedPosition)
-        {
-            var bounds = _camera.GetBoundingRectangle();
-            var realPosition = fixedPosition + new Vector2(bounds.Left, bounds.Top);
-            return realPosition;
         }
 
         private void collideY()
@@ -808,7 +769,7 @@ namespace lp
             var height = _tiledMap.HeightInPixels;
             var width = _tiledMap.WidthInPixels;
             var drawPosition = Vector2.Zero;
-            var offset = _camera.Position / 2;
+            var offset = game.camera.getPosition() / 2;
             var xDraws = width / backgroundImage.Width + 1;
             var yDraws = height / backgroundImage.Height + 1;
             var xCounter = 0;
