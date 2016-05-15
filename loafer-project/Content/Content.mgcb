@@ -149,3 +149,9 @@
 /processorParam:TextureFormat=Color
 /build:emulogic-8_0.png
 
+#begin generic01.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Medium
+/build:generic01.wav
+
