@@ -12,8 +12,6 @@ namespace lp
 {
     public class Scene_Level : Scene
     {
-        public Debug debug;
-
         public Scene_Level(lpGame lpGame) : base(lpGame)
         {
 
@@ -21,19 +19,16 @@ namespace lp
 
         public override void init()
         {
-            debug = new Debug(game);
             game.currentLevel = new Level_Test1(game);
             game.player = new Player(game);
             game.camera.followEntity(game.player);
             game.player.init();
-            debug.init();
             game.currentLevel.init();
         }
 
         public override void update(float deltaSeconds)
         {
             game.player.update(deltaSeconds);
-            debug.update(deltaSeconds);
             if (game.currentLevel.mapId == "test" && game.player.position == new Vector2(0, 240))
             {
                 game.player.spawnPosition = new Vector2(43 * 16, 5 * 16);
@@ -48,6 +43,8 @@ namespace lp
                 game.currentLevel = new Level_Test1(game);
                 game.currentLevel.init();
             }
+            if (game.input.menuJustPressed)
+                game.scene.setScene("Title");
         }
 
         public override void draw(SpriteBatch spriteBatch)
@@ -57,7 +54,6 @@ namespace lp
             game.player.draw(spriteBatch);
             game.currentLevel.drawForeground(spriteBatch);
             spriteBatch.End();
-            debug.draw(spriteBatch);
         }
 
         public override void destroy()

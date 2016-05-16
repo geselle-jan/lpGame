@@ -58,8 +58,6 @@ namespace lp
                 handleSizeChange();
                 changingFullscreen = false;
             }
-            if (game.input.menuJustPressed)
-                game.Exit();
         }
 
         public void clientSizeChanged(object sender, EventArgs e)

@@ -21,6 +21,8 @@ namespace lp
         {
             if (game.input.rightJustPressed)
                 game.scene.setScene("Level");
+            if (game.input.menuJustPressed)
+                game.Exit();
         }
 
         public override void draw(SpriteBatch spriteBatch)

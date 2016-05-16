@@ -19,6 +19,7 @@ namespace lp
         public InputManager input;
         public CameraManager camera;
         public Graphics graphics;
+        public Debug debug;
         public Physics physics;
         public SceneManager scene;
 
@@ -39,6 +40,7 @@ namespace lp
             input = new InputManager(game);
             camera = new CameraManager(game);
             graphics = new Graphics(game);
+            debug = new Debug(game);
             physics = new Physics(game);
             scene = new SceneManager(game);
         }
@@ -48,6 +50,7 @@ namespace lp
             window.init();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.init();
+            debug.init();
             scene.setScene("Title");
             base.Initialize();
         }
@@ -70,6 +73,7 @@ namespace lp
             game.input.update();
             scene.update(deltaSeconds);
             game.camera.update(deltaSeconds);
+            debug.update(deltaSeconds);
             window.update(deltaSeconds);
             base.Update(gameTime);
         }
@@ -78,6 +82,7 @@ namespace lp
         {
             GraphicsDevice.Clear(Color.Black);
             scene.draw(spriteBatch);
+            debug.draw(spriteBatch);
             base.Draw(gameTime);
         }
         
