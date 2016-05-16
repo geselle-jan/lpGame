@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
@@ -15,6 +16,7 @@ namespace lp
         public Color textColor = Color.LimeGreen;
         public Color backgroundColor = Color.Black;
         public FramesPerSecondCounterComponent fpsCounter;
+        public List<Entity> entities = new List<Entity>();
 
         public Debug(lpGame lpGame)
         {
@@ -71,7 +73,18 @@ namespace lp
             }
         }
 
-        public void draw(SpriteBatch spriteBatch)
+        public void drawLevel(SpriteBatch spriteBatch)
+        {
+            if (show && game.graphicsDeviceManager.GraphicsDevice != null)
+            {
+                foreach (var entity in entities)
+                {
+                    spriteBatch.Draw(game.graphics.getRectangleTexture((int)entity.size.X, (int)entity.size.Y, textColor), entity.position);
+                }
+            }
+        }
+
+        public void drawFixed(SpriteBatch spriteBatch)
         {
             if (show && game.graphicsDeviceManager.GraphicsDevice != null)
             {

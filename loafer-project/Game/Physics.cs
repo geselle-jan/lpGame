@@ -12,6 +12,19 @@ namespace lp
             game = lpGame;
         }
 
+        public bool intersect(Entity a, Entity b)
+        {
+            return !(
+                a.position.X + a.size.X < b.position.X
+                ||
+                a.position.Y + a.size.Y < b.position.Y
+                ||
+                a.position.X > b.position.X + b.size.X
+                ||
+                a.position.Y > b.position.Y + b.size.Y
+            );
+        }
+
         public void collideY(Entity entity, TiledMap map)
         {
             entity.isOnSlope = false;
@@ -47,6 +60,16 @@ namespace lp
         public float checkCollisionY(Entity entity, TiledMap map)
         {
             var collisionY = 0f;
+            var collisionMapBottom = (entity.position.Y + entity.size.Y) - (map.HeightInPixels);
+            var collisionMapTop = entity.position.Y;
+            if (collisionMapBottom > 0 && collisionMapBottom > collisionY)
+            {
+                collisionY = collisionMapBottom;
+            }
+            if (collisionMapTop < 0 && collisionMapTop < collisionY)
+            {
+                collisionY = collisionMapTop;
+            }
             foreach (var tileLayer in map.TileLayers)
             {
                 if (tileLayer.Name == "collision")
@@ -287,6 +310,16 @@ namespace lp
         public float checkCollisionX(Entity entity, TiledMap map)
         {
             var collisionX = 0f;
+            var collisionMapRight = (entity.position.X + entity.size.X) - (map.WidthInPixels);
+            var collisionMapLeft = entity.position.X;
+            if (collisionMapRight > 0 && collisionMapRight > collisionX)
+            {
+                collisionX = collisionMapRight;
+            }
+            if (collisionMapLeft < 0 && collisionMapLeft < collisionX)
+            {
+                collisionX = collisionMapLeft;
+            }
             foreach (var tileLayer in map.TileLayers)
             {
                 if (tileLayer.Name == "collision")

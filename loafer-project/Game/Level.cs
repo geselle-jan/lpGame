@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
@@ -15,6 +16,7 @@ namespace lp
         public string backgroundId;
         public Texture2D backgroundImage;
         public bool showCollision = false;
+        public List<Door> doors = new List<Door>();
         public string name
         {
             get { return GetType().Name; }
@@ -27,11 +29,20 @@ namespace lp
 
         public void init()
         {
+            game.debug.entities = new List<Entity>();
             loadMap();
+            foreach (var door in doors)
+            {
+                door.init();
+            }
         }
 
         public void update(float deltaSeconds)
         {
+            foreach (var door in doors)
+            {
+                door.update(deltaSeconds);
+            }
         }
 
         public void loadMap()
@@ -86,6 +97,11 @@ namespace lp
                 {
                     spriteBatch.Draw(layer, game.camera.instance);
                 }
+            }
+
+            foreach (var door in doors)
+            {
+                door.draw(spriteBatch);
             }
         }
 

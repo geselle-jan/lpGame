@@ -30,7 +30,7 @@ namespace lp
         private SpriteBatch spriteBatch;
         private float deltaSeconds = 0f;
 
-        private SoundEffect song;
+        //private SoundEffect song;
 
         public lpGame()
         {
@@ -57,10 +57,10 @@ namespace lp
 
         protected override void LoadContent()
         {
-            song = Content.Load<SoundEffect>("generic01");
-            var songInstance = song.CreateInstance();
-            songInstance.IsLooped = true;
-            songInstance.Play();
+            //song = Content.Load<SoundEffect>("generic01");
+            //var songInstance = song.CreateInstance();
+            //songInstance.IsLooped = true;
+            //songInstance.Play();
         }
 
         protected override void UnloadContent()
@@ -82,7 +82,7 @@ namespace lp
         {
             GraphicsDevice.Clear(Color.Black);
             scene.draw(spriteBatch);
-            debug.draw(spriteBatch);
+            debug.drawFixed(spriteBatch);
             base.Draw(gameTime);
         }
         

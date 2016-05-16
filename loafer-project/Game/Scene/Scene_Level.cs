@@ -31,16 +31,6 @@ namespace lp
         {
             game.levelManager.update(deltaSeconds);
             game.player.update(deltaSeconds);
-            if (game.currentLevel.mapId == "test" && game.player.position == new Vector2(0, 240))
-            {
-                game.player.position = new Vector2(43 * 16, 5 * 16);
-                game.levelManager.setLevel("Test2");
-            }
-            if (game.currentLevel.mapId == "debug_level" && game.player.position == new Vector2(704, 80))
-            {
-                game.player.position = new Vector2(0, 240);
-                game.levelManager.setLevel("Test1");
-            }
             if (game.input.menuJustPressed)
                 game.scene.setScene("Title");
         }
@@ -51,6 +41,7 @@ namespace lp
             game.levelManager.drawBackground(spriteBatch);
             game.player.draw(spriteBatch);
             game.levelManager.drawForeground(spriteBatch);
+            game.debug.drawLevel(spriteBatch);
             spriteBatch.End();
         }
 

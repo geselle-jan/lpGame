@@ -41,6 +41,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Debug.cs" />
+    <Compile Include="Game\Door.cs" />
     <Compile Include="Game\Entity.cs" />
     <Compile Include="Game\Graphics.cs" />
     <Compile Include="Game\InputManager.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Game\LevelManager.cs" />
     <Compile Include="Game\Level\Level_Test1.cs" />
     <Compile Include="Game\Level\Level_Test2.cs" />
+    <Compile Include="Game\Level\Level_Test3.cs" />
     <Compile Include="Game\Physics.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Game\Scene.cs" />
