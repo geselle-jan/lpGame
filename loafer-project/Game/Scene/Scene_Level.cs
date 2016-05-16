@@ -34,7 +34,20 @@ namespace lp
         {
             game.player.update(deltaSeconds);
             debug.update(deltaSeconds);
-            //if (game.player.position == )
+            if (game.currentLevel.mapId == "test" && game.player.position == new Vector2(0, 240))
+            {
+                game.player.spawnPosition = new Vector2(43 * 16, 5 * 16);
+                game.player.position = game.player.spawnPosition;
+                game.currentLevel = new Level_Test2(game);
+                game.currentLevel.init();
+            }
+            if (game.currentLevel.mapId == "debug_level" && game.player.position == new Vector2(704, 80))
+            {
+                game.player.spawnPosition = new Vector2(2 * 16, 31 * 16);
+                game.player.position = new Vector2(16, 240);
+                game.currentLevel = new Level_Test1(game);
+                game.currentLevel.init();
+            }
         }
 
         public override void draw(SpriteBatch spriteBatch)
