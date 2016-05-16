@@ -15,6 +15,10 @@ namespace lp
         public string backgroundId;
         public Texture2D backgroundImage;
         public bool showCollision = false;
+        public string name
+        {
+            get { return GetType().Name; }
+        }
 
         public Level(lpGame lpGame)
         {
@@ -24,6 +28,10 @@ namespace lp
         public void init()
         {
             loadMap();
+        }
+
+        public void update(float deltaSeconds)
+        {
         }
 
         public void loadMap()

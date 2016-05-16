@@ -114,7 +114,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         collisionY = 1f;
@@ -143,7 +142,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         collisionY = 1f;
@@ -173,7 +171,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         collisionY = 1f;
@@ -203,7 +200,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         highHalfSlopeCollided = true;
@@ -234,7 +230,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         highHalfSlopeCollided = true;
@@ -265,7 +260,6 @@ namespace lp
 
                                     if (entity.onGround && highestPointUnderEntity != 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"intersection: {intersection}");
                                         entity.position.Y = entity.position.Y - intersection + 1;
                                         entity.isOnSlope = true;
                                         collisionY = 1f;

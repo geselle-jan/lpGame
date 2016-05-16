@@ -45,6 +45,7 @@
     <Compile Include="Game\Graphics.cs" />
     <Compile Include="Game\InputManager.cs" />
     <Compile Include="Game\Level.cs" />
+    <Compile Include="Game\LevelManager.cs" />
     <Compile Include="Game\Level\Level_Test1.cs" />
     <Compile Include="Game\Level\Level_Test2.cs" />
     <Compile Include="Game\Physics.cs" />

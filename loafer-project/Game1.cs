@@ -1,12 +1,12 @@
-﻿//using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-//using MonoGame.Extended;
-//using MonoGame.Extended.BitmapFonts;
-//using MonoGame.Extended.Maps.Tiled;
-//using MonoGame.Extended.Sprites;
-//using Microsoft.Xna.Framework.Audio;
+using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.Sprites;
+using Microsoft.Xna.Framework.Audio;
 
 namespace lp
 {
@@ -22,15 +22,15 @@ namespace lp
         public Debug debug;
         public Physics physics;
         public SceneManager scene;
+        public Level currentLevel;
+        public Player player;
+        public LevelManager levelManager;
 
         public Vector2 currentBounds;
         private SpriteBatch spriteBatch;
         private float deltaSeconds = 0f;
 
-        public Level currentLevel;
-        public Player player;
-
-        //private SoundEffect song;
+        private SoundEffect song;
 
         public lpGame()
         {
@@ -57,10 +57,10 @@ namespace lp
 
         protected override void LoadContent()
         {
-            //song = Content.Load<SoundEffect>("generic01");
-            //var songInstance = song.CreateInstance();
-            //songInstance.IsLooped = true;
-            //songInstance.Play();
+            song = Content.Load<SoundEffect>("generic01");
+            var songInstance = song.CreateInstance();
+            songInstance.IsLooped = true;
+            songInstance.Play();
         }
 
         protected override void UnloadContent()

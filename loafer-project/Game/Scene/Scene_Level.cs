@@ -19,29 +19,27 @@ namespace lp
 
         public override void init()
         {
-            game.currentLevel = new Level_Test1(game);
             game.player = new Player(game);
+            game.levelManager = new LevelManager(game);
             game.camera.followEntity(game.player);
             game.player.init();
-            game.currentLevel.init();
+            game.levelManager.init();
+            game.debug.log($"level-name: {game.currentLevel.name}");
         }
 
         public override void update(float deltaSeconds)
         {
+            game.levelManager.update(deltaSeconds);
             game.player.update(deltaSeconds);
             if (game.currentLevel.mapId == "test" && game.player.position == new Vector2(0, 240))
             {
-                game.player.spawnPosition = new Vector2(43 * 16, 5 * 16);
-                game.player.position = game.player.spawnPosition;
-                game.currentLevel = new Level_Test2(game);
-                game.currentLevel.init();
+                game.player.position = new Vector2(43 * 16, 5 * 16);
+                game.levelManager.setLevel("Test2");
             }
             if (game.currentLevel.mapId == "debug_level" && game.player.position == new Vector2(704, 80))
             {
-                game.player.spawnPosition = new Vector2(2 * 16, 31 * 16);
-                game.player.position = new Vector2(16, 240);
-                game.currentLevel = new Level_Test1(game);
-                game.currentLevel.init();
+                game.player.position = new Vector2(0, 240);
+                game.levelManager.setLevel("Test1");
             }
             if (game.input.menuJustPressed)
                 game.scene.setScene("Title");
@@ -50,9 +48,9 @@ namespace lp
         public override void draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(transformMatrix: game.camera.getViewMatrix(), samplerState: SamplerState.PointClamp);
-            game.currentLevel.drawBackground(spriteBatch);
+            game.levelManager.drawBackground(spriteBatch);
             game.player.draw(spriteBatch);
-            game.currentLevel.drawForeground(spriteBatch);
+            game.levelManager.drawForeground(spriteBatch);
             spriteBatch.End();
         }
 

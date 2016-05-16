@@ -11,7 +11,6 @@ namespace lp
         public int jumpAbortSpeed = 70;
         public bool jumpAborted = false;
         public bool canJump = true;
-        public Vector2 spawnPosition = new Vector2(2 * 16, 31 * 16);
 
         public Player(lpGame lpGame) : base(lpGame)
         {
@@ -21,8 +20,6 @@ namespace lp
 
         public new void init()
         {
-            position = spawnPosition;
-
             base.init();
         }
 
@@ -101,7 +98,7 @@ namespace lp
             base.update(deltaSeconds);
 
             if (game.input.resetPlayerJustPressed)
-                position = spawnPosition;
+                game.levelManager.setToSpawn();
         }
 
         public new void draw(SpriteBatch spriteBatch)

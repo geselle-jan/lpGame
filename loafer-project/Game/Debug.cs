@@ -89,5 +89,10 @@ namespace lp
                 spriteBatch.End();
             }
         }
+
+        public void log(string text)
+        {
+            System.Diagnostics.Debug.WriteLine(text);
+        }
     }
 }
