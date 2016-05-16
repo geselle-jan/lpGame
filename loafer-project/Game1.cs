@@ -18,9 +18,9 @@ namespace lp
         public ContentManager content;
         public InputManager input;
         public CameraManager camera;
-        public Physics physics;
         public Graphics graphics;
-        public Debug debug;
+        public Physics physics;
+        public SceneManager scene;
 
         public Vector2 currentBounds;
         private SpriteBatch spriteBatch;
@@ -30,7 +30,7 @@ namespace lp
         public Player player;
 
         //private SoundEffect song;
-        
+
         public lpGame()
         {
             game = this;
@@ -38,28 +38,22 @@ namespace lp
             content = Content;
             input = new InputManager(game);
             camera = new CameraManager(game);
-            physics = new Physics(game);
             graphics = new Graphics(game);
-            debug = new Debug(game);
-            currentLevel = new Level_Test(game);
-            player = new Player(game);
-            camera.followEntity(player);
+            physics = new Physics(game);
+            scene = new SceneManager(game);
         }
 
         protected override void Initialize()
         {
             window.init();
-            player.init();
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            graphics.init();
+            scene.setScene("Title");
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphics.init();
-            debug.init();
-            currentLevel.init();
-
             //song = Content.Load<SoundEffect>("generic01");
             //var songInstance = song.CreateInstance();
             //songInstance.IsLooped = true;
@@ -74,8 +68,7 @@ namespace lp
         {
             deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             game.input.update();
-            player.update(deltaSeconds);
-            debug.update(deltaSeconds);
+            scene.update(deltaSeconds);
             game.camera.update(deltaSeconds);
             window.update(deltaSeconds);
             base.Update(gameTime);
@@ -84,12 +77,7 @@ namespace lp
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(transformMatrix: game.camera.getViewMatrix(), samplerState: SamplerState.PointClamp);
-            currentLevel.drawBackground(spriteBatch);
-            player.draw(spriteBatch);
-            currentLevel.drawForeground(spriteBatch);
-            spriteBatch.End();
-            debug.draw(spriteBatch);
+            scene.draw(spriteBatch);
             base.Draw(gameTime);
         }
         

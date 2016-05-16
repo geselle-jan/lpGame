@@ -79,8 +79,8 @@ namespace lp
                 spriteBatch.Draw(outerRectangle, game.camera.getFixedPositionFor(Vector2.Zero));
                 spriteBatch.Draw(innerRectangle, game.camera.getFixedPositionFor(Vector2.One));
                 spriteBatch.DrawString(game.graphics.font, $"FPS: {fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
-                spriteBatch.DrawString(game.graphics.font, $"Velocity X: {game.player.velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
-                spriteBatch.DrawString(game.graphics.font, $"Velocity Y: {game.player.velocity.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
+                spriteBatch.DrawString(game.graphics.font, $"Position X: {game.player.position.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
+                spriteBatch.DrawString(game.graphics.font, $"Position Y: {game.player.position.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
                 spriteBatch.DrawString(game.graphics.font, $"onGround: {game.player.onGround}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
                 spriteBatch.DrawString(game.graphics.font, $"isOnSlope: {game.player.isOnSlope}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
                 spriteBatch.End();
