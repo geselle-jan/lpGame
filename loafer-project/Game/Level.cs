@@ -15,6 +15,7 @@ namespace lp
         public string mapId;
         public string backgroundId;
         public Texture2D backgroundImage;
+        public SpriteSheet backgroundSpriteSheet;
         public bool showCollision = false;
         public List<Door> doors = new List<Door>();
         public string name
@@ -39,6 +40,10 @@ namespace lp
 
         public void update(float deltaSeconds)
         {
+            if (backgroundSpriteSheet != null)
+            {
+                backgroundSpriteSheet.update(deltaSeconds);
+            }
             foreach (var door in doors)
             {
                 door.update(deltaSeconds);
@@ -48,7 +53,10 @@ namespace lp
         public void loadMap()
         {
             map = game.content.Load<TiledMap>(mapId);
-            backgroundImage = game.content.Load<Texture2D>(backgroundId);
+            if (backgroundSpriteSheet == null)
+            {
+                backgroundImage = game.content.Load<Texture2D>(backgroundId);
+            }
             game.currentBounds = new Vector2(map.WidthInPixels, map.HeightInPixels);
         }
 
@@ -107,16 +115,28 @@ namespace lp
 
         private void drawBackgroundImage(SpriteBatch spriteBatch)
         {
+            var imageWidth = 0;
+            var imageHeight = 0;
+            if (backgroundSpriteSheet != null)
+            {
+                imageWidth = (int)backgroundSpriteSheet.frameSize.X;
+                imageHeight = (int)backgroundSpriteSheet.frameSize.Y;
+            }
+            else
+            {
+                imageWidth = backgroundImage.Width;
+                imageHeight = backgroundImage.Height;
+            } 
             var height = map.HeightInPixels;
             var width = map.WidthInPixels;
             var drawPosition = Vector2.Zero;
             var offset = game.camera.getPosition() / 2;
-            var xDraws = width / backgroundImage.Width + 1;
-            var yDraws = height / backgroundImage.Height + 1;
+            var xDraws = width / imageWidth + 1;
+            var yDraws = height / imageHeight + 1;
             var xCounter = 0;
             var yCounter = 0;
-            var xShift = Math.Ceiling(offset.X / backgroundImage.Width) * backgroundImage.Width;
-            var yShift = Math.Ceiling(offset.Y / backgroundImage.Height) * backgroundImage.Height;
+            var xShift = Math.Ceiling(offset.X / imageWidth) * imageWidth;
+            var yShift = Math.Ceiling(offset.Y / imageHeight) * imageHeight;
             var shift = new Vector2((float)xShift, (float)yShift);
 
             while (xCounter <= xDraws)
@@ -124,9 +144,17 @@ namespace lp
                 yCounter = 0;
                 while (yCounter <= yDraws)
                 {
-                    drawPosition.X = xCounter * backgroundImage.Width;
-                    drawPosition.Y = yCounter * backgroundImage.Height;
-                    spriteBatch.Draw(backgroundImage, drawPosition + offset - shift);
+                    drawPosition.X = xCounter * imageWidth;
+                    drawPosition.Y = yCounter * imageHeight;
+                    if (backgroundSpriteSheet != null)
+                    {
+                        backgroundSpriteSheet.draw(spriteBatch, drawPosition + offset - shift);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(backgroundImage, drawPosition + offset - shift);
+                    }
+
                     yCounter++;
                 }
                 xCounter++;

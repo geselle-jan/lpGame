@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Game\Animation.cs" />
     <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Debug.cs" />
     <Compile Include="Game\Door.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Game\SceneManager.cs" />
     <Compile Include="Game\Scene\Scene_Level.cs" />
     <Compile Include="Game\Scene\Scene_Title.cs" />
+    <Compile Include="Game\SpriteSheet.cs" />
     <Compile Include="Game\WindowManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

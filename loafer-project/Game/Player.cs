@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace lp
@@ -14,7 +15,10 @@ namespace lp
 
         public Player(lpGame lpGame) : base(lpGame)
         {
-            textureId = "player";
+            spriteSheet = new SpriteSheet(game);
+            spriteSheet.init("player", new Vector2(1 * 16, 2 * 16));
+            spriteSheet.animations.Add(new Animation("test", new List<int> { 0, 1, 2, 3 }, 4, game));
+            spriteSheet.play("test");
             gravity = new Vector2(0, 600);
         }
 

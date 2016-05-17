@@ -16,6 +16,7 @@ namespace lp
         public bool isOnSlope = false;
         public Texture2D texture;
         public string textureId;
+        public SpriteSheet spriteSheet;
 
         public Entity(lpGame lpGame)
         {
@@ -24,12 +25,23 @@ namespace lp
 
         public void init()
         {
-            texture = game.content.Load<Texture2D>(textureId);
-            size = new Vector2(texture.Width, texture.Height);
+            if (spriteSheet != null)
+            {
+                size = spriteSheet.frameSize;
+            }
+            else
+            {
+                texture = game.content.Load<Texture2D>(textureId);
+                size = new Vector2(texture.Width, texture.Height);
+            }
         }
 
         public void update(float deltaSeconds)
         {
+            if (spriteSheet != null)
+            {
+                spriteSheet.update(deltaSeconds);
+            }
             velocity += gravity * deltaSeconds * 1;
             position.Y = position.Y + (velocity.Y * deltaSeconds);
             game.physics.collideY(this, game.currentLevel.map);
@@ -39,7 +51,14 @@ namespace lp
 
         public void draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position);
+            if (spriteSheet != null)
+            {
+                spriteSheet.draw(spriteBatch, position);
+            }
+            else
+            {
+                spriteBatch.Draw(texture, position);
+            }
         }
     }
 }
