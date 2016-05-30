@@ -13,6 +13,7 @@ namespace lp
 {
     public class lpGame : Game
     {
+        public bool paused = true;
         public lpGame game;
         public WindowManager window;
         public GraphicsDeviceManager graphicsDeviceManager;
@@ -70,6 +71,10 @@ namespace lp
 
         protected override void Update(GameTime gameTime)
         {
+            if (game.input.togglePauseJustPressed)
+            {
+                game.paused = !game.paused;
+            }
             deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
             game.input.update();
             scene.update(deltaSeconds);

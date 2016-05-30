@@ -29,80 +29,84 @@ namespace lp
 
         public new void update(float deltaSeconds)
         {
-            if (game.input.rightPressed)
+            if (!game.paused)
             {
-                if (velocity.X < 0)
+                if (game.input.rightPressed)
                 {
-                    velocity.X = 0;
-                }
-                if (velocity.X < speed)
-                {
-                    velocity.X += acceleration * deltaSeconds;
-                }
-                if (velocity.X > speed)
-                {
-                    velocity.X = speed;
-                }
-            }
-
-            if (game.input.leftPressed)
-            {
-                if (velocity.X > 0)
-                {
-                    velocity.X = 0;
-                }
-                if (velocity.X > -speed)
-                {
-                    velocity.X += -acceleration * deltaSeconds;
-                }
-                if (velocity.X < -speed)
-                {
-                    velocity.X = -speed;
-                }
-            }
-
-            if (!game.input.rightPressed && !game.input.leftPressed)
-            {
-                velocity.X = 0;
-            }
-
-            if (game.input.rightPressed && game.input.leftPressed)
-            {
-                velocity.X = 0;
-            }
-
-            if (onGround)
-            {
-                if (game.input.jumpPressed)
-                {
-                    if (canJump)
+                    if (velocity.X < 0)
                     {
-                        canJump = false;
-                        jumpAborted = false;
-                        velocity.Y = jumpSpeed * -1;
+                        velocity.X = 0;
+                    }
+                    if (velocity.X < speed)
+                    {
+                        velocity.X += acceleration * deltaSeconds;
+                    }
+                    if (velocity.X > speed)
+                    {
+                        velocity.X = speed;
+                    }
+                }
+
+                if (game.input.leftPressed)
+                {
+                    if (velocity.X > 0)
+                    {
+                        velocity.X = 0;
+                    }
+                    if (velocity.X > -speed)
+                    {
+                        velocity.X += -acceleration * deltaSeconds;
+                    }
+                    if (velocity.X < -speed)
+                    {
+                        velocity.X = -speed;
+                    }
+                }
+
+                if (!game.input.rightPressed && !game.input.leftPressed)
+                {
+                    velocity.X = 0;
+                }
+
+                if (game.input.rightPressed && game.input.leftPressed)
+                {
+                    velocity.X = 0;
+                }
+
+                if (onGround)
+                {
+                    if (game.input.jumpPressed)
+                    {
+                        if (canJump)
+                        {
+                            canJump = false;
+                            jumpAborted = false;
+                            velocity.Y = jumpSpeed * -1;
+                        }
+                    }
+                    else
+                    {
+                        canJump = true;
                     }
                 }
                 else
                 {
-                    canJump = true;
-                }
-            }
-            else
-            {
-                if (!canJump && !jumpAborted && !game.input.jumpPressed)
-                {
-                    jumpAborted = true;
-                    if (velocity.Y < -jumpAbortSpeed)
+                    if (!canJump && !jumpAborted && !game.input.jumpPressed)
                     {
-                        velocity.Y = -jumpAbortSpeed;
+                        jumpAborted = true;
+                        if (velocity.Y < -jumpAbortSpeed)
+                        {
+                            velocity.Y = -jumpAbortSpeed;
+                        }
                     }
                 }
             }
 
             base.update(deltaSeconds);
 
-            if (game.input.resetPlayerJustPressed)
+            if (game.input.resetPlayerJustPressed && !game.paused)
                 game.levelManager.setToSpawn();
+
         }
 
         public new void draw(SpriteBatch spriteBatch)

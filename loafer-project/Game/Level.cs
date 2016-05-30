@@ -18,6 +18,7 @@ namespace lp
         public SpriteSheet backgroundSpriteSheet;
         public bool showCollision = false;
         public List<Door> doors = new List<Door>();
+        public Black black;
         public string name
         {
             get { return GetType().Name; }
@@ -36,11 +37,13 @@ namespace lp
             {
                 door.init();
             }
+            black = new Black(new Vector2(map.WidthInPixels, map.HeightInPixels), game);
+            black.init();
         }
 
         public void update(float deltaSeconds)
         {
-            if (backgroundSpriteSheet != null)
+            if (backgroundSpriteSheet != null && !game.paused)
             {
                 backgroundSpriteSheet.update(deltaSeconds);
             }
@@ -48,6 +51,7 @@ namespace lp
             {
                 door.update(deltaSeconds);
             }
+            black.update(deltaSeconds);
         }
 
         public void loadMap()
@@ -110,6 +114,16 @@ namespace lp
             foreach (var door in doors)
             {
                 door.draw(spriteBatch);
+            }
+
+            black.draw(spriteBatch);
+
+            foreach (var door in doors)
+            {
+                if (door.transitionFrom || door.transitionTo)
+                {
+                    door.draw(spriteBatch);
+                }
             }
         }
 

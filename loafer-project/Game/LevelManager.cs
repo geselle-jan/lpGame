@@ -52,6 +52,7 @@ namespace lp
             if (game.currentLevel == null || game.currentLevel.name != "Level_" + spawnLevel)
             {
                 setLevel(spawnLevel);
+                game.currentLevel.black.fadeOut();
             }
             game.player.position = spawnPosition;
         }

@@ -102,6 +102,13 @@ namespace lp
             return realPosition;
         }
 
+        public Vector2 getRelativePositionFor(Vector2 relativePosition)
+        {
+            var bounds = instance.GetBoundingRectangle();
+            var realPosition = relativePosition - new Vector2(bounds.Left, bounds.Top);
+            return realPosition;
+        }
+
         public Vector2 getPosition()
         {
             return instance.Position;

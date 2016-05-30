@@ -38,15 +38,18 @@ namespace lp
 
         public void update(float deltaSeconds)
         {
-            if (spriteSheet != null)
+            if (!game.paused)
             {
-                spriteSheet.update(deltaSeconds);
+                if (spriteSheet != null)
+                {
+                    spriteSheet.update(deltaSeconds);
+                }
+                velocity += gravity * deltaSeconds * 1;
+                position.Y = position.Y + (velocity.Y * deltaSeconds);
+                game.physics.collideY(this, game.currentLevel.map);
+                position.X = position.X + (velocity.X * deltaSeconds);
+                game.physics.collideX(this, game.currentLevel.map);
             }
-            velocity += gravity * deltaSeconds * 1;
-            position.Y = position.Y + (velocity.Y * deltaSeconds);
-            game.physics.collideY(this, game.currentLevel.map);
-            position.X = position.X + (velocity.X * deltaSeconds);
-            game.physics.collideX(this, game.currentLevel.map);
         }
 
         public void draw(SpriteBatch spriteBatch)

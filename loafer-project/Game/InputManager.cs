@@ -28,6 +28,7 @@ namespace lp
         public Keys toggleTracking;
         public Keys toggleFullscreen;
         public Keys toggleDebug;
+        public Keys togglePause;
 
         public Keys resetPlayer;
 
@@ -91,6 +92,10 @@ namespace lp
         public bool toggleDebugPressedBefore = false;
         public bool toggleDebugJustPressed = false;
 
+        public bool togglePausePressed = false;
+        public bool togglePausePressedBefore = false;
+        public bool togglePauseJustPressed = false;
+
         public bool resetPlayerPressed = false;
         public bool resetPlayerPressedBefore = false;
         public bool resetPlayerJustPressed = false;
@@ -120,6 +125,7 @@ namespace lp
             toggleTracking = Keys.T;
             toggleFullscreen = Keys.F11;
             toggleDebug = Keys.I;
+            togglePause = Keys.Space;
 
             resetPlayer = Keys.Z;
 
@@ -153,6 +159,7 @@ namespace lp
             toggleTrackingPressedBefore = toggleTrackingPressed;
             toggleFullscreenPressedBefore = toggleFullscreenPressed;
             toggleDebugPressedBefore = toggleDebugPressed;
+            togglePausePressedBefore = togglePausePressed;
 
             resetPlayerPressedBefore = resetPlayerPressed;
 
@@ -181,6 +188,7 @@ namespace lp
             toggleTrackingPressed = keyboardState.IsKeyDown(toggleTracking);
             toggleFullscreenPressed = keyboardState.IsKeyDown(toggleFullscreen);
             toggleDebugPressed = keyboardState.IsKeyDown(toggleDebug);
+            togglePausePressed = keyboardState.IsKeyDown(togglePause);
 
             resetPlayerPressed = keyboardState.IsKeyDown(resetPlayer);
 
@@ -209,6 +217,7 @@ namespace lp
             toggleTrackingJustPressed = toggleTrackingPressed && !toggleTrackingPressedBefore ? true : false;
             toggleFullscreenJustPressed = toggleFullscreenPressed && !toggleFullscreenPressedBefore ? true : false;
             toggleDebugJustPressed = toggleDebugPressed && !toggleDebugPressedBefore ? true : false;
+            togglePauseJustPressed = togglePausePressed && !togglePausePressedBefore ? true : false;
 
             resetPlayerJustPressed = resetPlayerPressed && !resetPlayerPressedBefore ? true : false;
 
