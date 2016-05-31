@@ -14,8 +14,10 @@ namespace lp
 
         public Keys left;
         public Keys right;
-        public Keys jump;
-        //public Keys  fire;
+        public Keys up;
+        public Keys down;
+        public Keys a;
+        public Keys b;
 
         public Keys cameraUp;
         public Keys cameraDown;
@@ -48,13 +50,21 @@ namespace lp
         public bool rightPressedBefore = false;
         public bool rightJustPressed = false;
 
-        public bool jumpPressed = false;
-        public bool jumpPressedBefore = false;
-        public bool jumpJustPressed = false;
+        public bool upPressed = false;
+        public bool upPressedBefore = false;
+        public bool upJustPressed = false;
 
-        //public bool firePressed = false;
-        //public bool firePressedBefore = false;
-        //public bool fireJustPressed = false;
+        public bool downPressed = false;
+        public bool downPressedBefore = false;
+        public bool downJustPressed = false;
+
+        public bool aPressed = false;
+        public bool aPressedBefore = false;
+        public bool aJustPressed = false;
+
+        public bool bPressed = false;
+        public bool bPressedBefore = false;
+        public bool bJustPressed = false;
 
         public bool cameraUpPressed = false;
         public bool cameraUpPressedBefore = false;
@@ -109,25 +119,27 @@ namespace lp
         {
             game = lpGame;
 
-            left = Keys.Left;
-            right = Keys.Right;
-            jump = Keys.Up;
-            // fire;
+            left = Keys.A;
+            right = Keys.D;
+            up = Keys.W;
+            down = Keys.S;
+            a = Keys.Up;
+            b = Keys.Left;
 
-            cameraUp = Keys.W;
-            cameraDown = Keys.S;
-            cameraLeft = Keys.A;
-            cameraRight = Keys.D;
+            cameraUp = Keys.NumPad8;
+            cameraDown = Keys.NumPad2;
+            cameraLeft = Keys.NumPad4;
+            cameraRight = Keys.NumPad6;
 
-            zoomIn = Keys.R;
-            zoomOut = Keys.F;
+            zoomIn = Keys.NumPad9;
+            zoomOut = Keys.NumPad3;
 
-            toggleTracking = Keys.T;
+            toggleTracking = Keys.NumPad5;
             toggleFullscreen = Keys.F11;
-            toggleDebug = Keys.I;
-            togglePause = Keys.Space;
+            toggleDebug = Keys.NumPad0;
+            togglePause = Keys.NumPad7;
 
-            resetPlayer = Keys.Z;
+            resetPlayer = Keys.NumPad1;
 
             menu = Keys.Escape;
         }
@@ -145,8 +157,10 @@ namespace lp
 
             leftPressedBefore = leftPressed;
             rightPressedBefore = rightPressed;
-            jumpPressedBefore = jumpPressed;
-            //firePressedBefore = firePressed;
+            upPressedBefore = leftPressed;
+            downPressedBefore = rightPressed;
+            aPressedBefore = leftPressed;
+            bPressedBefore = rightPressed;
 
             cameraUpPressedBefore = cameraUpPressed;
             cameraDownPressedBefore = cameraDownPressed;
@@ -174,8 +188,10 @@ namespace lp
 
             leftPressed = keyboardState.IsKeyDown(left);
             rightPressed = keyboardState.IsKeyDown(right);
-            jumpPressed = keyboardState.IsKeyDown(jump);
-            //firePressed = keyboardState.IsKeyDown(fire);
+            upPressed = keyboardState.IsKeyDown(up);
+            downPressed = keyboardState.IsKeyDown(down);
+            aPressed = keyboardState.IsKeyDown(a);
+            bPressed = keyboardState.IsKeyDown(b);
 
             cameraUpPressed = keyboardState.IsKeyDown(cameraUp);
             cameraDownPressed = keyboardState.IsKeyDown(cameraDown);
@@ -203,8 +219,10 @@ namespace lp
 
             leftJustPressed = leftPressed && !leftPressedBefore ? true : false;
             rightJustPressed = rightPressed && !rightPressedBefore ? true : false;
-            jumpJustPressed = jumpPressed && !jumpPressedBefore ? true : false;
-            //fireJustPressed = firePressed && !firePressedBefore ? true : false;
+            upJustPressed = upPressed && !upPressedBefore ? true : false;
+            downJustPressed = downPressed && !downPressedBefore ? true : false;
+            aJustPressed = aPressed && !aPressedBefore ? true : false;
+            bJustPressed = bPressed && !bPressedBefore ? true : false;
 
             cameraUpJustPressed = cameraUpPressed && !cameraUpPressedBefore ? true : false;
             cameraDownJustPressed = cameraDownPressed && !cameraDownPressedBefore ? true : false;

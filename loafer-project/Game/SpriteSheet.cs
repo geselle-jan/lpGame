@@ -21,10 +21,12 @@ namespace lp
         public int currentIndex = 0;
         public List<Animation> animations = new List<Animation>();
         public Animation currentAnimation;
+        public Entity entity;
 
-        public SpriteSheet(lpGame lpGame)
+        public SpriteSheet(Entity entity, lpGame lpGame)
         {
             game = lpGame;
+            this.entity = entity;
         }
 
         public void init(string contentId, Vector2 size)
@@ -49,10 +51,24 @@ namespace lp
             {
                 if (animation.id == animationName)
                 {
-                    animation.reset();
-                    currentAnimation = animation;
+                    if (currentAnimation != animation)
+                    {
+                        animation.reset();
+                        currentAnimation = animation;
+                        if (entity != null)
+                        {
+                            entity.offset = currentAnimation.offset;
+                        }
+                    }
                 }
             }
+        }
+
+        public bool animationFinished()
+        {
+            if (currentAnimation == null)
+                return false;
+            return currentAnimation.finished;
         }
 
         public void update(float deltaSeconds)

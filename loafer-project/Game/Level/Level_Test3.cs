@@ -8,9 +8,9 @@ namespace lp
         public Level_Test3(lpGame lpGame) : base(lpGame)
         {
             mapId = "sector01_room02";
-            backgroundSpriteSheet = new SpriteSheet(game);
+            backgroundSpriteSheet = new SpriteSheet(null, game);
             backgroundSpriteSheet.init("browntank_animation", new Vector2(32 * 16, 16 * 16));
-            backgroundSpriteSheet.animations.Add(new Animation("bubbles", new List<int> { 0, 1, 2, 3 }, 4, game));
+            backgroundSpriteSheet.animations.Add(new Animation("bubbles", new List<int> { 0, 1, 2, 3 }, 4, true, Vector2.Zero, backgroundSpriteSheet, game));
             backgroundSpriteSheet.play("bubbles");
 
             doors.Add(new Door(game));

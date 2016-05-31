@@ -85,9 +85,6 @@ namespace lp
             game.graphicsDeviceManager.PreferredBackBufferWidth = (int)size.X;
             game.graphicsDeviceManager.PreferredBackBufferHeight = (int)size.Y;
 
-            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Width: {game.Window.ClientBounds.Width}");
-            System.Diagnostics.Debug.WriteLine($"Window.ClientBounds.Height: {game.Window.ClientBounds.Height}");
-
             game.graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferWidth = game.graphicsDeviceManager.PreferredBackBufferWidth;
             game.graphicsDeviceManager.GraphicsDevice.PresentationParameters.BackBufferHeight = game.graphicsDeviceManager.PreferredBackBufferHeight;
             game.graphicsDeviceManager.GraphicsDevice.Viewport = new Viewport(0, 0, game.graphicsDeviceManager.PreferredBackBufferWidth, game.graphicsDeviceManager.PreferredBackBufferHeight);

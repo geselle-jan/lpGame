@@ -9,6 +9,7 @@ namespace lp
 
         public Vector2 position = Vector2.Zero;
         public Vector2 size = Vector2.Zero;
+        public Vector2 offset = Vector2.Zero;
         public Vector2 gravity = Vector2.Zero;
         public Vector2 velocity = Vector2.Zero;
         public bool onGround = false;
@@ -56,11 +57,11 @@ namespace lp
         {
             if (spriteSheet != null)
             {
-                spriteSheet.draw(spriteBatch, position);
+                spriteSheet.draw(spriteBatch, position - offset);
             }
             else
             {
-                spriteBatch.Draw(texture, position);
+                spriteBatch.Draw(texture, position - offset);
             }
         }
     }

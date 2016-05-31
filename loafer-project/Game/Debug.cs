@@ -52,11 +52,13 @@ namespace lp
 
             if (game.input.zoomInPressed)
             {
+                game.camera.zoomLock = false;
                 game.camera.zoomIn(zoomSpeed * deltaSeconds);
             }
 
             if (game.input.zoomOutPressed)
             {
+                game.camera.zoomLock = false;
                 game.camera.zoomOut(zoomSpeed * deltaSeconds);
             }
 
@@ -94,10 +96,10 @@ namespace lp
                 spriteBatch.DrawString(game.graphics.font, $"FPS: {fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
                 if (game.scene.current is Scene_Level)
                 {
-                    spriteBatch.DrawString(game.graphics.font, $"Position X: {game.player.position.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"Position Y: {game.player.position.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"onGround: {game.player.onGround}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"isOnSlope: {game.player.isOnSlope}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
+                    spriteBatch.DrawString(game.graphics.font, $"Vel. X: {game.player.velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
+                    spriteBatch.DrawString(game.graphics.font, $"Vel. Y: {game.player.velocity.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
+                    spriteBatch.DrawString(game.graphics.font, $"anim: {game.player.spriteSheet.currentAnimation.id}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
+                    spriteBatch.DrawString(game.graphics.font, $"fall: {game.player.falling}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
                 }
                 spriteBatch.End();
             }

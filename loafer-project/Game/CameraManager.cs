@@ -13,6 +13,7 @@ namespace lp
         public Camera2D instance;
 
         public float zoom = 4;
+        public bool zoomLock = true;
         public Entity follow;
 
         public CameraManager(lpGame lpGame)
@@ -39,6 +40,10 @@ namespace lp
 
         public void update(float deltaSeconds)
         {
+            if (zoomLock)
+            {
+                setSize();
+            }
             if (follow != null)
             {
                 focus(follow.position + follow.size / 2);
@@ -93,6 +98,15 @@ namespace lp
                 }
                 instance.Move(adjustment);
             }
+        }
+
+        public void setSize()
+        {
+            var window = new Vector2(game.graphicsDeviceManager.PreferredBackBufferWidth, game.graphicsDeviceManager.PreferredBackBufferHeight);
+            var visible = new Vector2(30, 20) * 16;
+            var z = window / visible;
+            zoom = z.X > z.Y ? z.X: z.Y;
+            instance.Zoom = zoom;
         }
 
         public Vector2 getFixedPositionFor(Vector2 fixedPosition)

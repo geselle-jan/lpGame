@@ -44,7 +44,10 @@ namespace lp
             {
                 var speedX = 1;
                 var speedY = 4;
-                position.Y += deltaSeconds * transitionDistance.Y * speedY;
+                if (transitionDistance.Y != 0)
+                {
+                    position.Y += deltaSeconds * transitionDistance.Y * speedY;
+                }
                 if (transitionDistance.Y < 0 && position.Y < transitionPosition.Y)
                 {
                     position.Y = transitionPosition.Y;

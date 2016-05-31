@@ -16,12 +16,19 @@ namespace lp
         public string id;
         public List<int> frames = new List<int>();
         public int fps = 1;
+        public bool loop;
         public int currentIndex = 0;
         public float timer = 0;
+        public SpriteSheet spritesheet;
+        public Vector2 offset = Vector2.Zero;
+        public bool finished = false;
 
-        public Animation(string id, List<int> frames, int fps, lpGame lpGame)
+        public Animation(string id, List<int> frames, int fps, bool loop, Vector2 offset, SpriteSheet spritesheet, lpGame lpGame)
         {
             game = lpGame;
+            this.spritesheet = spritesheet;
+            this.offset = offset;
+            this.loop = loop;
             this.id = id;
             this.frames = frames;
             this.fps = fps;
@@ -35,6 +42,7 @@ namespace lp
 
         public void reset()
         {
+            finished = false;
             timer = 0;
             currentIndex = 0;
         }
@@ -50,7 +58,15 @@ namespace lp
             }
             if (currentIndex >= frames.Count)
             {
-                currentIndex = 0;
+                if (loop)
+                {
+                    currentIndex = 0;
+                }
+                else
+                {
+                    finished = true;
+                    currentIndex = frames.Count - 1;
+                }
             }
         }
     }
