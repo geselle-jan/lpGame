@@ -17,16 +17,23 @@ namespace lp
 
         public List<Level> levels = new List<Level>();
 
-        public string spawnLevel = "Test1";
-        public Vector2 spawnPosition = new Vector2(6 * 16, 31 * 16);
+        public string spawnLevel = "sector01_room01";
+        public Vector2 spawnPosition = new Vector2(22 * 16, 2 * 16);
 
         public LevelManager(lpGame lpGame)
         {
             game = lpGame;
 
-            levels.Add(new Level_Test1(game));
-            levels.Add(new Level_Test2(game));
-            levels.Add(new Level_Test3(game));
+            levels.Add(new Level_Test(game));
+            levels.Add(new Level_Debug(game));
+            levels.Add(new Level_sector01_room01(game));
+            levels.Add(new Level_sector01_room02(game));
+            levels.Add(new Level_sector01_room03(game));
+            levels.Add(new Level_sector01_room04(game));
+            levels.Add(new Level_sector01_room05(game));
+            levels.Add(new Level_sector01_room06(game));
+            levels.Add(new Level_sector01_room07(game));
+            levels.Add(new Level_sector01_room08(game));
         }
 
         public Level getLevel(string name)

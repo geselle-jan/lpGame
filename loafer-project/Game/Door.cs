@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace lp
 {
@@ -44,9 +44,17 @@ namespace lp
             {
                 var speedX = 1;
                 var speedY = 4;
+                game.debug.log($"transition distance x: {transitionDistance.X}");
+                game.debug.log($"transition distance Y: {transitionDistance.Y}");
                 if (transitionDistance.Y != 0)
                 {
-                    position.Y += deltaSeconds * transitionDistance.Y * speedY;
+                    var realSpeedY = deltaSeconds * transitionDistance.Y * speedY;
+                    var sanitizedSpeedY = Math.Abs(realSpeedY) < 0.000001 ? 0.1 : realSpeedY;
+                    if (Math.Abs(realSpeedY) < 0.000001 && realSpeedY < 0)
+                    {
+                        sanitizedSpeedY *= -1;
+                    }
+                    position.Y += (float)sanitizedSpeedY;
                 }
                 if (transitionDistance.Y < 0 && position.Y < transitionPosition.Y)
                 {

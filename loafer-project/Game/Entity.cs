@@ -15,6 +15,7 @@ namespace lp
         public bool onGround = false;
         public bool wasOnSlope = false;
         public bool isOnSlope = false;
+        public bool gravityAffected = true;
         public Texture2D texture;
         public string textureId;
         public SpriteSheet spriteSheet;
@@ -45,7 +46,11 @@ namespace lp
                 {
                     spriteSheet.update(deltaSeconds);
                 }
-                velocity += gravity * deltaSeconds * 1;
+
+                if (gravityAffected)
+                {
+                    velocity += gravity * deltaSeconds * 1;
+                }
                 position.Y = position.Y + (velocity.Y * deltaSeconds);
                 game.physics.collideY(this, game.currentLevel.map);
                 position.X = position.X + (velocity.X * deltaSeconds);

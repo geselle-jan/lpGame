@@ -127,5 +127,10 @@ namespace lp
         {
             return instance.Position;
         }
+
+        public Vector2 getOffset()
+        {
+            return new Vector2(game.camera.instance.GetBoundingRectangle().Left, game.camera.instance.GetBoundingRectangle().Top);
+        }
     }
 }

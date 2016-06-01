@@ -213,3 +213,74 @@
 /processorParam:TextureFormat=Color
 /build:samus.png
 
+#begin sector01_room01.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room01.tmx
+
+#begin sector01_room03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room03.tmx
+
+#begin sector01_room04.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room04.tmx
+
+#begin sector01_room05.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room05.tmx
+
+#begin sector01_room06.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room06.tmx
+
+#begin sector01_room07.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room07.tmx
+
+#begin sector01_room08.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:sector01_room08.tmx
+
+#begin brown.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:brown.png
+
+#begin greenpassage.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:greenpassage.png
+
+#begin pipecorridor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pipecorridor.png
+

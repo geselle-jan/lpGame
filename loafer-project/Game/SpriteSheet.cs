@@ -21,6 +21,7 @@ namespace lp
         public int currentIndex = 0;
         public List<Animation> animations = new List<Animation>();
         public Animation currentAnimation;
+        public Vector2 offset = Vector2.Zero;
         public Entity entity;
 
         public SpriteSheet(Entity entity, lpGame lpGame)
@@ -64,6 +65,11 @@ namespace lp
             }
         }
 
+        public void setSpriteOffset(Vector2 spriteOffset)
+        {
+            offset = spriteOffset;
+        }
+
         public bool animationFinished()
         {
             if (currentAnimation == null)
@@ -82,7 +88,7 @@ namespace lp
 
         public void draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            spriteBatch.Draw(texture, position, null, getFrameSource(currentIndex));
+            spriteBatch.Draw(texture, position + offset, null, getFrameSource(currentIndex));
         }
     }
 }

@@ -157,10 +157,10 @@ namespace lp
 
             leftPressedBefore = leftPressed;
             rightPressedBefore = rightPressed;
-            upPressedBefore = leftPressed;
-            downPressedBefore = rightPressed;
-            aPressedBefore = leftPressed;
-            bPressedBefore = rightPressed;
+            upPressedBefore = upPressed;
+            downPressedBefore = downPressed;
+            aPressedBefore = aPressed;
+            bPressedBefore = bPressed;
 
             cameraUpPressedBefore = cameraUpPressed;
             cameraDownPressedBefore = cameraDownPressed;

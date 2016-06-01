@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,8 +12,14 @@ namespace lp
         public bool hJump = false;
         public bool falling = false;
         public bool turning = false;
-        public bool gravFree = false;
-        public bool powerGrip = false;
+        public bool isPowerGrip = false;
+        public bool canPowerGrip = true;
+        public bool isGripFall = false;
+        public bool isGripClimb = false;
+        public bool gripClimbing = false;
+        public Vector2 animPoint = Vector2.Zero;
+        public float powerGripTimer = 0;
+        public float gripClimbingTimer = 0;
         public int direction = 1;
 
         public Player(lpGame lpGame) : base(lpGame)
@@ -57,7 +64,7 @@ namespace lp
         {
             if (!game.paused)
             {
-                updateMovement();
+                updateMovement(deltaSeconds);
             }
             
             base.update(deltaSeconds);
@@ -81,12 +88,12 @@ namespace lp
             );
         }
         
-        public void updateMovement()
+        public void updateMovement(float deltaSeconds)
         {
             if (onGround && (vJump || hJump || falling)) {
                 landing();
             }
-            if (!gravFree)
+            if (gravityAffected)
             {
                 if (game.input.aPressed && onGround && canJump) {
                     jump();
@@ -135,10 +142,10 @@ namespace lp
             }
             if (velocity.Y > 0 && isExclusiveDirection())
             {
-                //grabEdge();
+                grabEdge();
             }
-            if (powerGrip) {
-                //powerGrip();
+            if (isPowerGrip) {
+                powerGrip();
             } else {
                 if (vJump || falling) {
                     if (isExclusiveDirection())
@@ -165,6 +172,27 @@ namespace lp
             if (velocity.Y > 400)
             {
                 velocity.Y = 400;
+            }
+            if (isGripFall)
+            {
+                powerGripTimer = 0;
+                canPowerGrip = false;
+            }
+            else if (powerGripTimer < 0.2)
+            {
+                powerGripTimer += deltaSeconds;
+            }
+            if (powerGripTimer >= 0.2)
+            {
+                canPowerGrip = true;
+            }
+            if (gripClimbing)
+            {
+                gripClimbingTimer += deltaSeconds;
+            }
+            else
+            {
+                gripClimbingTimer = 0;
             }
         }
 
@@ -506,7 +534,250 @@ namespace lp
             }
         }
 
-        
+        public void grabEdge()
+        {
+            var tileSize = 16;
+            if (!isGripFall && !canPowerGrip)
+            {
+                return;
+            }
+            if (position.X % tileSize != 0)
+            {
+                return;
+            }
+            var minX = position.X - tileSize;
+            var maxX = position.X + tileSize;
+            var minY = position.Y;
+            var maxY = position.Y + tileSize;
+            var stepX = tileSize * 2;
+            var stepY = tileSize;
+            var x = minX;
+            var y = minY;
+            foreach (var tileLayer in game.currentLevel.map.TileLayers)
+            {
+                if (tileLayer.Name == "collision")
+                {
+                    while (x <= maxX)
+                    {
+                        while (y <= maxY)
+                        {
+                            var tile = tileLayer.GetTile(
+                                (int)Math.Floor(x / tileSize),
+                                (int)Math.Floor(y / tileSize)
+                            );
 
+                            if (tile.Id == 1)
+                            {
+                                var spacingY = position.Y - tile.Y * tileSize;
+                                if (
+                                    spacingY > 0
+                                    &&
+                                    spacingY < tileSize / 2
+                                    &&
+                                    (
+                                        (
+                                            direction == -1
+                                            &&
+                                            tile.X * tileSize + tileSize / 2 < position.X
+                                        )
+                                        ||
+                                        (
+                                            direction == 1
+                                            &&
+                                            tile.X * tileSize + tileSize / 2 > position.X + size.X
+                                        )
+                                    )
+                                )
+                                {
+                                    var above = tileLayer.GetTile(
+                                        tile.X,
+                                        tile.Y - 1
+                                    );
+                                    if (above.Id == 0)
+                                    {
+                                        hJump = false;
+                                        vJump = false;
+                                        falling = false;
+                                        turning = false;
+                                        velocity.X = 0;
+                                        velocity.Y = 0;
+                                        position.Y = tile.Y * tileSize;
+                                        if (direction == -1)
+                                        {
+                                            position.X = tile.X * tileSize + tileSize;
+                                            spriteSheet.play("grabEdgeLeft");
+                                            spriteSheet.setSpriteOffset(new Vector2(-1, 6));
+                                        }
+                                        else
+                                        {
+                                            position.X = tile.X * tileSize - size.X;
+                                            spriteSheet.play("grabEdgeRight");
+                                            spriteSheet.setSpriteOffset(new Vector2(1, 6));
+                                        }
+                                        gravityAffected = false;
+                                        isPowerGrip = true;
+                                    }
+                                }
+                            }
+                            y += stepY;
+                        }
+                        y = minY;
+                        x += stepX;
+                    }
+                }
+            }
+        }
+
+
+        public void powerGrip()
+        {
+            var climbUp = isGripClimb || gripClimbing;
+            if (spriteSheet.currentAnimation.id == "grabEdgeLeft" && spriteSheet.animationFinished())
+            {
+                spriteSheet.play("powerGripLeft");
+                spriteSheet.setSpriteOffset(new Vector2(-2, 9));
+            }
+            if (spriteSheet.currentAnimation.id == "grabEdgeRight" && spriteSheet.animationFinished())
+            {
+                spriteSheet.play("powerGripRight");
+                spriteSheet.setSpriteOffset(new Vector2(2, 9));
+            }
+            if (game.input.downPressed && isGripFall) {
+                gripFall();
+            } else if (climbUp)
+            {
+                gripClimb();
+            }
+            else if (
+                (
+                    game.input.upJustPressed
+                    ||
+                    (
+                        game.input.aJustPressed
+                        &&
+                        game.input.leftPressed
+                        &&
+                        direction == -1
+                    )
+                    ||
+                    (
+                        game.input.aJustPressed
+                        &&
+                        game.input.rightPressed
+                        &&
+                        direction == 1
+                    )
+                )
+                &&
+                !isGripClimb
+            )
+            {
+                isGripClimb = true;
+            }
+            else if (!game.input.downPressed && !isGripFall)
+            {
+                isGripFall = true;
+            }
+        }
+
+        public void gripFall()
+        {
+            falling = true;
+            canJump =  false;
+            gravityAffected = true;
+            isPowerGrip = false;
+            isGripFall = false;
+            isGripClimb = false;
+            if (direction == -1) {
+                spriteSheet.play("fallLeft");
+            } else {
+                spriteSheet.play("fallRight");
+            }
+            spriteSheet.setSpriteOffset(Vector2.Zero);
+        }
+
+        public void gripClimb()
+        {
+            var tileSize = 16;
+            var duration = 0.3;
+            var difference = gripClimbing ? gripClimbingTimer : 0;
+            if (!gripClimbing)
+            {
+                canJump = false;
+                gripClimbing = true;
+                animPoint.X = position.X;
+                animPoint.Y = position.Y;
+            }
+            var tempY = size.Y / (duration / 2) * difference;
+            tempY = tempY > size.Y ? size.Y : tempY;
+            position.Y = animPoint.Y - (float)tempY;
+            var factorY = tempY / size.Y;
+            var tempX = (
+                difference > (duration / 2)
+                ?
+                (tileSize / (duration / 2) * difference) - tileSize
+                :
+                0
+            );
+            var factorX = tempX / tileSize;
+            var factor = difference / duration;
+            if (direction == -1) {
+                if (spriteSheet.currentAnimation.id != "gripClimbLeft")
+                {
+                    spriteSheet.play("gripClimbLeft");
+                }
+                position.X = animPoint.X - (float)tempX;
+                spriteSheet.setSpriteOffset(new Vector2(
+                    (float)((1 - factorX) * -2),
+                    (float)((1 - factor) * 9)
+                ));
+            } else {
+                if (spriteSheet.currentAnimation.id != "gripClimbRight")
+                {
+                    spriteSheet.play("gripClimbRight");
+                }
+                position.X = animPoint.X + (float)tempX;
+                spriteSheet.setSpriteOffset(new Vector2(
+                    (float)((1 - factorX) * 2),
+                    (float)((1 - factor) * 9)
+                ));
+            }
+            if (difference > duration)
+            {
+                gripClimbing = false;
+                isPowerGrip = false;
+                isGripClimb = false;
+                isGripFall = false;
+                turning = false;
+                gravityAffected = true;
+                position.Y = animPoint.Y - size.Y;
+                if (direction == -1) {
+                    position.X = animPoint.X - tileSize;
+                } else {
+                    position.X = animPoint.X + tileSize;
+                }
+                if (direction == -1) {
+                    if (game.input.leftPressed)
+                    {
+                        spriteSheet.play("walkLeft");
+                    }
+                    else
+                    {
+                        spriteSheet.play("standLeft");
+                    }
+                } else {
+                    if (game.input.rightPressed)
+                    {
+                        spriteSheet.play("walkRight");
+                    }
+                    else
+                    {
+                        spriteSheet.play("standRight");
+                    }
+                }
+                spriteSheet.setSpriteOffset(Vector2.Zero);
+            }
+        }
+        
     }
 }

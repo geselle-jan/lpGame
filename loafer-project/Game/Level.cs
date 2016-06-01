@@ -15,6 +15,7 @@ namespace lp
         public string mapId;
         public string backgroundId;
         public Texture2D backgroundImage;
+        public Vector2 backgroundOffset = Vector2.Zero;
         public SpriteSheet backgroundSpriteSheet;
         public bool showCollision = false;
         public List<Door> doors = new List<Door>();
@@ -144,7 +145,7 @@ namespace lp
             var height = map.HeightInPixels;
             var width = map.WidthInPixels;
             var drawPosition = Vector2.Zero;
-            var offset = game.camera.getPosition() / 2;
+            var offset = game.camera.getOffset() / 2;
             var xDraws = width / imageWidth + 1;
             var yDraws = height / imageHeight + 1;
             var xCounter = 0;
@@ -162,11 +163,11 @@ namespace lp
                     drawPosition.Y = yCounter * imageHeight;
                     if (backgroundSpriteSheet != null)
                     {
-                        backgroundSpriteSheet.draw(spriteBatch, drawPosition + offset - shift);
+                        backgroundSpriteSheet.draw(spriteBatch, drawPosition + offset + backgroundOffset - shift);
                     }
                     else
                     {
-                        spriteBatch.Draw(backgroundImage, drawPosition + offset - shift);
+                        spriteBatch.Draw(backgroundImage, drawPosition + offset + backgroundOffset - shift);
                     }
 
                     yCounter++;
