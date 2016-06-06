@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MonoGame.Extended.Maps.Tiled;
 
 namespace lp
@@ -27,33 +28,66 @@ namespace lp
 
         public void collideY(Entity entity, TiledMap map)
         {
-            entity.isOnSlope = false;
-            var collisionY = checkCollisionY(entity, map);
-            if (entity.wasOnSlope && !entity.isOnSlope)
+            if (entity.physical)
             {
-                entity.position.Y += 1;
-                collisionY = checkCollisionY(entity, map);
-            }
-            entity.onGround = false;
-            if (collisionY != 0)
-            {
-                if (collisionY > 0)
+                entity.isOnSlope = false;
+                var collisionY = checkCollisionY(entity, map);
+                if (entity.wasOnSlope && !entity.isOnSlope)
                 {
-                    entity.onGround = true;
+                    entity.position.Y += 1;
+                    collisionY = checkCollisionY(entity, map);
                 }
+                entity.onGround = false;
+                if (collisionY != 0)
+                {
+                    if (collisionY > 0)
+                    {
+                        entity.onGround = true;
+                    }
 
-                entity.velocity.Y = 0;
-                entity.position.Y -= collisionY;
+                    entity.velocity.Y = 0;
+                    entity.position.Y -= collisionY;
+                }
+                entity.wasOnSlope = entity.isOnSlope;
             }
-            entity.wasOnSlope = entity.isOnSlope;
+            else
+            {
+                var collisionY = checkCollisionY(entity, map);
+                if (collisionY != 0)
+                {
+                    game.debug.log($"{collisionY}");
+                    entity.collisionDirty = true;
+                }
+            }
         }
 
         public void collideX(Entity entity, TiledMap map)
         {
-            var collisionX = checkCollisionX(entity, map);
-            if (collisionX != 0)
+            if (entity.physical)
             {
-                entity.position.X -= collisionX;
+                entity.blockedLeft = false;
+                entity.blockedRight = false;
+                var collisionX = checkCollisionX(entity, map);
+                if (collisionX != 0)
+                {
+                    if (collisionX > 0)
+                    {
+                        entity.blockedRight = true;
+                    }
+                    else
+                    {
+                        entity.blockedLeft = true;
+                    }
+                    entity.position.X -= collisionX;
+                }
+            }
+            else
+            {
+                var collisionX = checkCollisionX(entity, map);
+                if (collisionX != 0)
+                {
+                    entity.collisionDirty = true;
+                }
             }
         }
 
@@ -79,7 +113,6 @@ namespace lp
                     var currentY = 0;
                     var highHalfSlopeCollided = false;
 
-
                     while (currentX <= entity.size.X)
                     {
                         while (currentY <= entity.size.Y)
@@ -101,6 +134,7 @@ namespace lp
                                 entityX,
                                 entityY
                             ).Id;
+
                             if (tileID == 1)
                             {
                                 if (entity.velocity.Y > 0) // falling down
@@ -122,7 +156,7 @@ namespace lp
                             }
                             else if (tileID == 2)
                             {
-                                if (entity.velocity.Y > 0) // falling down
+                                if (entity.velocity.Y > 0 || !entity.gravityAffected) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entity.position.X + entity.size.X - entityX * tileSize);
                                     if (highestPointUnderEntity < 0)
@@ -150,7 +184,7 @@ namespace lp
                             }
                             else if (tileID == 3)
                             {
-                                if (entity.velocity.Y > 0) // falling down
+                                if (entity.velocity.Y > 0 || !entity.gravityAffected) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entityX * tileSize + tileSize - entity.position.X);
                                     if (highestPointUnderEntity < 0)
@@ -178,7 +212,7 @@ namespace lp
                             }
                             else if (tileID == 4)
                             {
-                                if (entity.velocity.Y > 0 && !highHalfSlopeCollided) // falling down
+                                if ((entity.velocity.Y > 0 || !entity.gravityAffected) && !highHalfSlopeCollided) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entity.position.X + entity.size.X - entityX * tileSize);
                                     if (highestPointUnderEntity < 0)
@@ -207,7 +241,7 @@ namespace lp
                             }
                             else if (tileID == 5)
                             {
-                                if (entity.velocity.Y > 0) // falling down
+                                if (entity.velocity.Y > 0 || !entity.gravityAffected) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entity.position.X + entity.size.X - entityX * tileSize);
                                     if (highestPointUnderEntity < 0)
@@ -237,7 +271,7 @@ namespace lp
                             }
                             else if (tileID == 6)
                             {
-                                if (entity.velocity.Y > 0) // falling down
+                                if (entity.velocity.Y > 0 || !entity.gravityAffected) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entityX * tileSize + tileSize - entity.position.X);
                                     if (highestPointUnderEntity < 0)
@@ -267,7 +301,7 @@ namespace lp
                             }
                             else if (tileID == 7)
                             {
-                                if (entity.velocity.Y > 0 && !highHalfSlopeCollided) // falling down
+                                if ((entity.velocity.Y > 0 || !entity.gravityAffected) && !highHalfSlopeCollided) // falling down
                                 {
                                     var highestPointUnderEntity = tileSize - (entityX * tileSize + tileSize - entity.position.X);
                                     if (highestPointUnderEntity < 0)
@@ -295,11 +329,25 @@ namespace lp
                                 }
                             }
 
-                            currentY = currentY + tileSize;
+                            if (entity.size.Y < tileSize)
+                            {
+                                currentY = currentY + (int)entity.size.Y;
+                            }
+                            else
+                            {
+                                currentY = currentY + tileSize;
+                            }
                         }
 
                         currentY = 0;
-                        currentX = currentX + tileSize;
+                        if (entity.size.X < tileSize)
+                        {
+                            currentX = currentX + (int)entity.size.X;
+                        }
+                        else
+                        {
+                            currentX = currentX + tileSize;
+                        }
                     }
                 }
             }
@@ -352,6 +400,26 @@ namespace lp
                             ).Id;
                             if (tileID == 1)
                             {
+                                if (isSlopeAt(entityX, entityY - 1, tileLayer)) {
+                                    break;
+                                }
+
+                                if (entity.velocity.X > 0)
+                                {
+                                    if (isSlopeAt(entityX - 1, entityY, tileLayer))
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (entity.velocity.X < 0)
+                                {
+                                    if (isSlopeAt(entityX + 1, entityY, tileLayer))
+                                    {
+                                        break;
+                                    }
+                                }
+
                                 if (entity.velocity.X > 0) // going right
                                 {
                                     var intersection = (entity.position.X + entity.size.X) - (entityX * tileSize);
@@ -370,16 +438,43 @@ namespace lp
                                 }
                             }
 
-                            currentY = currentY + tileSize;
+                            if (entity.size.Y < tileSize)
+                            {
+                                currentY = currentY + (int)entity.size.Y;
+                            }
+                            else
+                            {
+                                currentY = currentY + tileSize;
+                            }
                         }
 
                         currentY = 0;
-                        currentX = currentX + tileSize;
+                        if (entity.size.X < tileSize)
+                        {
+                            currentX = currentX + (int)entity.size.X;
+                        }
+                        else
+                        {
+                            currentX = currentX + tileSize;
+                        }
                     }
                 }
             }
 
             return collisionX;
         }
+
+        public bool isSlope(TiledTile tile)
+        {
+            var slopeIds = new List<int> { 2, 3, 4, 5, 6, 7 };
+            return slopeIds.Contains(tile.Id);
+        }
+
+        public bool isSlopeAt(int x, int y, TiledTileLayer tileLayer)
+        {
+            var tile = tileLayer.GetTile(x, y);
+            return isSlope(tile);
+        }
+
     }
 }

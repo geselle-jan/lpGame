@@ -19,6 +19,7 @@ namespace lp
         public SpriteSheet backgroundSpriteSheet;
         public bool showCollision = false;
         public List<Door> doors = new List<Door>();
+        public List<Enemy> enemies = new List<Enemy>();
         public Black black;
         public string name
         {
@@ -38,6 +39,10 @@ namespace lp
             {
                 door.init();
             }
+            foreach (var enemy in enemies)
+            {
+                enemy.init();
+            }
             black = new Black(new Vector2(map.WidthInPixels, map.HeightInPixels), game);
             black.init();
         }
@@ -51,6 +56,10 @@ namespace lp
             foreach (var door in doors)
             {
                 door.update(deltaSeconds);
+            }
+            foreach (var enemy in enemies)
+            {
+                enemy.update(deltaSeconds);
             }
             black.update(deltaSeconds);
         }
@@ -96,6 +105,11 @@ namespace lp
 
         public void drawForeground(SpriteBatch spriteBatch)
         {
+            foreach (var enemy in enemies)
+            {
+                enemy.draw(spriteBatch);
+            }
+
             foreach (var layer in map.Layers)
             {
                 if (layer.Name == "foreground2")

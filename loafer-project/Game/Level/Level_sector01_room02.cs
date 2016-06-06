@@ -27,6 +27,11 @@ namespace lp
             doors[2].position = new Vector2(28 * 16, 13 * 16);
             doors[2].targetRoom = "sector01_room03";
             doors[2].targetDoor = 0;
+
+            doors.Add(new Door(game));
+            doors[3].position = new Vector2(28 * 16, 3 * 16);
+            doors[3].targetRoom = "Debug_Combat";
+            doors[3].targetDoor = 0;
         }
     }
 }

@@ -96,10 +96,13 @@ namespace lp
                 spriteBatch.DrawString(game.graphics.font, $"FPS: {fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
                 if (game.scene.current is Scene_Level)
                 {
-                    spriteBatch.DrawString(game.graphics.font, $"Cam Pos. X: {game.camera.instance.GetBoundingRectangle().Left}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"Cam Pos. Y: {game.camera.instance.GetBoundingRectangle().Top}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"anim: {game.player.spriteSheet.currentAnimation.id}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
-                    spriteBatch.DrawString(game.graphics.font, $"direction: {game.player.direction}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
+                    if (false)
+                    {
+                        spriteBatch.DrawString(game.graphics.font, $"Vel. X: {game.currentLevel.enemies[0].velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
+                        spriteBatch.DrawString(game.graphics.font, $"Vel. Y: {game.currentLevel.enemies[0].velocity.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
+                        spriteBatch.DrawString(game.graphics.font, $"onground: {game.currentLevel.enemies[0].onGround}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
+                        spriteBatch.DrawString(game.graphics.font, $"Pos. Y: {game.currentLevel.enemies[0].position.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
+                    }
                 }
                 spriteBatch.End();
             }

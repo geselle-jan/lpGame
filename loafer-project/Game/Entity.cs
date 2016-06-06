@@ -12,6 +12,11 @@ namespace lp
         public Vector2 offset = Vector2.Zero;
         public Vector2 gravity = Vector2.Zero;
         public Vector2 velocity = Vector2.Zero;
+        public bool alive = true;
+        public bool physical = true;
+        public bool collisionDirty = false;
+        public bool blockedLeft = false;
+        public bool blockedRight = false;
         public bool onGround = false;
         public bool wasOnSlope = false;
         public bool isOnSlope = false;
@@ -33,14 +38,17 @@ namespace lp
             }
             else
             {
-                texture = game.content.Load<Texture2D>(textureId);
+                if (texture == null)
+                {
+                    texture = game.content.Load<Texture2D>(textureId);
+                }
                 size = new Vector2(texture.Width, texture.Height);
             }
         }
 
         public void update(float deltaSeconds)
         {
-            if (!game.paused)
+            if (!game.paused && alive)
             {
                 if (spriteSheet != null)
                 {
@@ -60,14 +68,18 @@ namespace lp
 
         public void draw(SpriteBatch spriteBatch)
         {
-            if (spriteSheet != null)
+            if (alive)
             {
-                spriteSheet.draw(spriteBatch, position - offset);
-            }
-            else
-            {
-                spriteBatch.Draw(texture, position - offset);
+                if (spriteSheet != null)
+                {
+                    spriteSheet.draw(spriteBatch, position - offset);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture, position - offset);
+                }
             }
         }
+
     }
 }

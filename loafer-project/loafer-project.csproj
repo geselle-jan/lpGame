@@ -41,14 +41,17 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Game\Animation.cs" />
     <Compile Include="Game\Black.cs" />
+    <Compile Include="Game\Bullet.cs" />
     <Compile Include="Game\CameraManager.cs" />
     <Compile Include="Game\Debug.cs" />
     <Compile Include="Game\Door.cs" />
+    <Compile Include="Game\Enemy.cs" />
     <Compile Include="Game\Entity.cs" />
     <Compile Include="Game\Graphics.cs" />
     <Compile Include="Game\InputManager.cs" />
     <Compile Include="Game\Level.cs" />
     <Compile Include="Game\LevelManager.cs" />
+    <Compile Include="Game\Level\Level_Debug_Combat.cs" />
     <Compile Include="Game\Level\Level_sector01_room01.cs" />
     <Compile Include="Game\Level\Level_sector01_room03.cs" />
     <Compile Include="Game\Level\Level_sector01_room04.cs" />
@@ -66,6 +69,7 @@
     <Compile Include="Game\Scene\Scene_Level.cs" />
     <Compile Include="Game\Scene\Scene_Title.cs" />
     <Compile Include="Game\SpriteSheet.cs" />
+    <Compile Include="Game\Weapon.cs" />
     <Compile Include="Game\WindowManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

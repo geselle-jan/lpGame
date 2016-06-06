@@ -284,3 +284,20 @@
 /processorParam:TextureFormat=Color
 /build:pipecorridor.png
 
+#begin debug_combat.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:debug_combat.tmx
+
+#begin enemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:enemy.png
+

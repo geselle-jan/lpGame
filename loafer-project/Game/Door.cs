@@ -44,8 +44,6 @@ namespace lp
             {
                 var speedX = 1;
                 var speedY = 4;
-                game.debug.log($"transition distance x: {transitionDistance.X}");
-                game.debug.log($"transition distance Y: {transitionDistance.Y}");
                 if (transitionDistance.Y != 0)
                 {
                     var realSpeedY = deltaSeconds * transitionDistance.Y * speedY;

@@ -21,6 +21,7 @@ namespace lp
         public float powerGripTimer = 0;
         public float gripClimbingTimer = 0;
         public int direction = 1;
+        public Weapon weapon;
 
         public Player(lpGame lpGame) : base(lpGame)
         {
@@ -51,11 +52,13 @@ namespace lp
             spriteSheet.animations.Add(new Animation("airTurnRight", new List<int> { 249, 250 }, 20, false, new Vector2(17, 14), spriteSheet, game));
             
             spriteSheet.play("standRight");
+            weapon = new Weapon(game);
             gravity = new Vector2(0, 600);
         }
 
         public new void init()
         {
+            weapon.init();
             base.init();
             size = new Vector2(1 * 16, 2 * 16);
         }
@@ -66,7 +69,8 @@ namespace lp
             {
                 updateMovement(deltaSeconds);
             }
-            
+
+            weapon.update(deltaSeconds);
             base.update(deltaSeconds);
 
             if (game.input.resetPlayerJustPressed && !game.paused)
@@ -76,6 +80,7 @@ namespace lp
 
         public new void draw(SpriteBatch spriteBatch)
         {
+            weapon.draw(spriteBatch);
             base.draw(spriteBatch);
         }
 
@@ -90,6 +95,15 @@ namespace lp
         
         public void updateMovement(float deltaSeconds)
         {
+            if (onGround || canJump || falling)
+            {
+                if (game.input.bJustPressed)
+                {
+                    weapon.fire();
+                }
+            }
+
+
             if (onGround && (vJump || hJump || falling)) {
                 landing();
             }
