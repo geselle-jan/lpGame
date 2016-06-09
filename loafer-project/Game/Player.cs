@@ -95,7 +95,7 @@ namespace lp
         
         public void updateMovement(float deltaSeconds)
         {
-            if (onGround || canJump || falling)
+            if (onGround || canJump || falling || hJump)
             {
                 if (game.input.bJustPressed)
                 {

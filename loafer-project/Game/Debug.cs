@@ -95,7 +95,7 @@ namespace lp
                 spriteBatch.Draw(innerRectangle, game.camera.getFixedPositionFor(Vector2.One));
                 spriteBatch.DrawString(game.graphics.font, $"FPS: {fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
                 if (game.scene.current is Scene_Level)
-                {
+                {/*
                     if (true)
                     {
                         spriteBatch.DrawString(game.graphics.font, $"Vel. X: {game.currentLevel.enemies[0].velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
@@ -103,7 +103,7 @@ namespace lp
                         spriteBatch.DrawString(game.graphics.font, $"onground: {game.currentLevel.enemies[0].onGround}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 3)), textColor);
                         spriteBatch.DrawString(game.graphics.font, $"Pos. Y: {game.currentLevel.enemies[0].position.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 4)), textColor);
                     }
-                }
+                */}
                 spriteBatch.End();
             }
         }
