@@ -96,7 +96,7 @@ namespace lp
                 spriteBatch.DrawString(game.graphics.font, $"FPS: {fpsCounter.AverageFramesPerSecond:0}", game.camera.getFixedPositionFor(new Vector2(8, 8)), textColor);
                 if (game.scene.current is Scene_Level)
                 {
-                    if (false)
+                    if (true)
                     {
                         spriteBatch.DrawString(game.graphics.font, $"Vel. X: {game.currentLevel.enemies[0].velocity.X}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 1)), textColor);
                         spriteBatch.DrawString(game.graphics.font, $"Vel. Y: {game.currentLevel.enemies[0].velocity.Y}", game.camera.getFixedPositionFor(new Vector2(8, 8 + game.graphics.font.LineHeight * 2)), textColor);
