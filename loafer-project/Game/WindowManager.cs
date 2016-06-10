@@ -10,7 +10,7 @@ namespace lp
 
         public bool windowDirty = false;
         public static Vector2 screenSize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-        public Vector2 size = new Vector2(16 * 30, 16* 20);
+        public Vector2 size = screenSize / 2;
         public bool changingFullscreen = false;
 
         public WindowManager(lpGame lpGame)

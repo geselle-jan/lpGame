@@ -7,7 +7,7 @@ namespace lp
         public Level_Debug_Combat(lpGame lpGame) : base(lpGame)
         {
             mapId = "debug_combat";
-            backgroundId = "debug_bg";
+            backgroundId = "sr388cave";
 
             doors.Add(new Door(game));
             doors[0].position = new Vector2(-2 * 16, 23 * 16);
