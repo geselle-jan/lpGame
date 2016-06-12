@@ -9,6 +9,7 @@ namespace lp
     {
         public bool turning = false;
         public int direction = 1;
+        public int health = 10;
 
         public Enemy(lpGame lpGame) : base(lpGame)
         {
@@ -27,14 +28,30 @@ namespace lp
         public new void init()
         {
             base.init();
+            alive = true;
+            health = 10;
             size = new Vector2(1 * 16, 1 * 16);
         }
 
         public new void update(float deltaSeconds)
         {
-            if (!game.paused)
+            if (!game.paused && alive)
             {
                 updateMovement(deltaSeconds);
+
+                foreach (var bullet in game.player.weapon.bullets)
+                {
+                    if (bullet.alive && game.physics.intersect(this, bullet))
+                    {
+                        bullet.alive = false;
+                        health -= 2;
+                    }
+                }
+
+                if (health <= 0)
+                {
+                    alive = false;
+                }
             }
 
             base.update(deltaSeconds);

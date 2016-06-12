@@ -21,6 +21,9 @@ namespace lp
         public float powerGripTimer = 0;
         public float gripClimbingTimer = 0;
         public int direction = 1;
+        public int health = 100;
+        public bool knockback = false;
+        public float knockbackTimer = 0;
         public Weapon weapon;
 
         public Player(lpGame lpGame) : base(lpGame)
@@ -32,8 +35,8 @@ namespace lp
             spriteSheet.animations.Add(new Animation("standRight", new List<int> { 21, 22, 23 }, 3, true, new Vector2(17, 14), spriteSheet, game));
             spriteSheet.animations.Add(new Animation("turnLeft", new List<int> { 20, 19 }, 20, false, new Vector2(17, 14), spriteSheet, game));
             spriteSheet.animations.Add(new Animation("turnRight", new List<int> { 19, 20 }, 20, false, new Vector2(17, 14), spriteSheet, game));
-            spriteSheet.animations.Add(new Animation("walkLeft", new List<int> { 51, 50, 49, 48, 59, 58, 57, 56, 67, 66 }, 20, true, new Vector2(17, 14), spriteSheet, game));
-            spriteSheet.animations.Add(new Animation("walkRight", new List<int> { 52, 53, 54, 55, 60, 61, 62, 63, 68, 69 }, 20, true, new Vector2(17, 14), spriteSheet, game));
+            spriteSheet.animations.Add(new Animation("walkLeft", new List<int> { 51, 50, 49, 48, 59, 58, 57, 56, 67, 66 }, 18, true, new Vector2(17, 14), spriteSheet, game));
+            spriteSheet.animations.Add(new Animation("walkRight", new List<int> { 52, 53, 54, 55, 60, 61, 62, 63, 68, 69 }, 18, true, new Vector2(17, 14), spriteSheet, game));
             spriteSheet.animations.Add(new Animation("hJumpLeft", new List<int> { 259, 258, 257, 256, 267, 266, 265, 264 }, 30, true, new Vector2(17, 14), spriteSheet, game));
             spriteSheet.animations.Add(new Animation("hJumpRight", new List<int> { 260, 261, 262, 263, 268, 269, 270, 271 }, 30, true, new Vector2(17, 14), spriteSheet, game));
             spriteSheet.animations.Add(new Animation("powerGripLeft", new List<int> { 329, 330, 331, 330 }, 3, true, new Vector2(17, 14), spriteSheet, game));
@@ -73,6 +76,8 @@ namespace lp
             weapon.update(deltaSeconds);
             base.update(deltaSeconds);
 
+            updateEnemyCollision(deltaSeconds);
+
             if (game.input.resetPlayerJustPressed && !game.paused)
                 game.levelManager.setToSpawn();
 
@@ -82,6 +87,34 @@ namespace lp
         {
             weapon.draw(spriteBatch);
             base.draw(spriteBatch);
+        }
+
+        public void updateEnemyCollision(float deltaSeconds)
+        {
+            if (knockback && knockbackTimer >= 1)
+            {
+                knockback = false;
+                knockbackTimer = 0;
+            }
+            if (!knockback)
+            {
+                foreach (var enemy in game.currentLevel.enemies)
+                {
+                    if (enemy.alive && game.physics.intersect(this, enemy))
+                    {
+                        health -= 20;
+                        knockback = true;
+                        if (health <= 0)
+                        {
+                            game.scene.setScene("Title");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                knockbackTimer += deltaSeconds;
+            }
         }
 
         public bool isExclusiveDirection()
@@ -116,11 +149,11 @@ namespace lp
                 {
                     if (game.input.leftPressed)
                     {
-                        walkLeft();
+                        walkLeft(deltaSeconds);
                     }
                     else
                     {
-                        walkRight();
+                        walkRight(deltaSeconds);
                     }
                 }
                 else if (onGround)
@@ -245,7 +278,7 @@ namespace lp
             }
         }
 
-        public void walkLeft()
+        public void walkLeft(float deltaSeconds)
         {
             if (direction != -1)
             {
@@ -262,19 +295,19 @@ namespace lp
                 {
                     velocity.X = 0;
                 }
-                if (velocity.X > -180)
+                if (velocity.X > -160)
                 {
-                    velocity.X += -15;
+                    velocity.X += -512 * deltaSeconds;
                 }
-                if (velocity.X < -180)
+                if (velocity.X < -160)
                 {
-                    velocity.X = -180;
+                    velocity.X = -160;
                 }
                 spriteSheet.play("walkLeft");
             }
         }
 
-        public void walkRight()
+        public void walkRight(float deltaSeconds)
         {
             if (direction != 1)
             {
@@ -291,13 +324,13 @@ namespace lp
                 {
                     velocity.X = 0;
                 }
-                if (velocity.X < 180)
+                if (velocity.X < 160)
                 {
-                    velocity.X += 15;
+                    velocity.X += 512 * deltaSeconds;
                 }
-                if (velocity.X > 180)
+                if (velocity.X > 160)
                 {
-                    velocity.X = 180;
+                    velocity.X = 160;
                 }
                 spriteSheet.play("walkRight");
             }

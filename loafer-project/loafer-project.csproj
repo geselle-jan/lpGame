@@ -69,6 +69,7 @@
     <Compile Include="Game\Scene\Scene_Level.cs" />
     <Compile Include="Game\Scene\Scene_Title.cs" />
     <Compile Include="Game\SpriteSheet.cs" />
+    <Compile Include="Game\UI.cs" />
     <Compile Include="Game\Weapon.cs" />
     <Compile Include="Game\WindowManager.cs" />
     <Compile Include="Program.cs" />

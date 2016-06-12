@@ -22,6 +22,7 @@ namespace lp
         public CameraManager camera;
         public Graphics graphics;
         public Debug debug;
+        public UI ui;
         public Physics physics;
         public SceneManager scene;
         public Level currentLevel;
@@ -43,6 +44,7 @@ namespace lp
             camera = new CameraManager(game);
             graphics = new Graphics(game);
             debug = new Debug(game);
+            ui = new UI(game);
             physics = new Physics(game);
             scene = new SceneManager(game);
         }
@@ -53,6 +55,7 @@ namespace lp
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.init();
             debug.init();
+            ui.init();
             scene.setScene("Title");
             base.Initialize();
         }
@@ -80,6 +83,7 @@ namespace lp
             scene.update(deltaSeconds);
             game.camera.update(deltaSeconds);
             debug.update(deltaSeconds);
+            ui.update(deltaSeconds);
             window.update(deltaSeconds);
             base.Update(gameTime);
         }
@@ -88,6 +92,7 @@ namespace lp
         {
             GraphicsDevice.Clear(Color.Black);
             scene.draw(spriteBatch);
+            ui.drawFixed(spriteBatch);
             debug.drawFixed(spriteBatch);
             base.Draw(gameTime);
         }

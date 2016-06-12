@@ -41,6 +41,7 @@ namespace lp
             game.levelManager.drawBackground(spriteBatch);
             game.player.draw(spriteBatch);
             game.levelManager.drawForeground(spriteBatch);
+            game.ui.drawLevel(spriteBatch);
             game.debug.drawLevel(spriteBatch);
             spriteBatch.End();
         }
