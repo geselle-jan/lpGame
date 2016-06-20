@@ -103,7 +103,7 @@ namespace lp
         public void setSize()
         {
             var window = new Vector2(game.graphicsDeviceManager.PreferredBackBufferWidth, game.graphicsDeviceManager.PreferredBackBufferHeight);
-            var visible = new Vector2(18, 10) * 16;
+            var visible = new Vector2(18, 11) * 16;
             var z = window / visible;
             zoom = z.X > z.Y ? z.X: z.Y;
             instance.Zoom = zoom;

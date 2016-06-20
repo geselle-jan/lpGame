@@ -20,7 +20,7 @@ namespace lp
 
             doors.Add(new Door(game));
             doors[1].position = new Vector2(-2 * 16, 3 * 16);
-            doors[1].targetRoom = "sector01_room01";
+            doors[1].targetRoom = "crater";
             doors[1].targetDoor = 0;
 
             doors.Add(new Door(game));
