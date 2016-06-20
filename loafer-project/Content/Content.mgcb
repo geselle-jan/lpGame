@@ -10,7 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\packages\MonoGame.Extended.0.5.149\lib\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\..\MonoGame.Extended\Source\MonoGame.Extended.Content.Pipeline\bin\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -288,4 +288,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:cave.png
+
+#begin maps/crater.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:maps/crater.tmx
 

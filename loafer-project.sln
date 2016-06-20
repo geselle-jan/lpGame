@@ -5,17 +5,41 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "loafer-project", "loafer-project\loafer-project.csproj", "{D00B22D7-E66F-429B-9B11-BD1295BA218A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended", "..\MonoGame.Extended\Source\MonoGame.Extended\MonoGame.Extended.csproj", "{41724C52-3D50-45BB-81EB-3C8A247EAFD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Extended.Content.Pipeline", "..\MonoGame.Extended\Source\MonoGame.Extended.Content.Pipeline\MonoGame.Extended.Content.Pipeline.csproj", "{28CD24BD-432C-4987-9E9D-65CFCF120EA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Debug|x86.ActiveCfg = Debug|x86
 		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Debug|x86.Build.0 = Debug|x86
+		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Release|Any CPU.ActiveCfg = Release|x86
 		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Release|x86.ActiveCfg = Release|x86
 		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Release|x86.Build.0 = Release|x86
 		{D00B22D7-E66F-429B-9B11-BD1295BA218A}.Release|x86.Deploy.0 = Release|x86
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Debug|x86.Build.0 = Debug|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Release|x86.ActiveCfg = Release|Any CPU
+		{41724C52-3D50-45BB-81EB-3C8A247EAFD1}.Release|x86.Build.0 = Release|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Debug|x86.Build.0 = Debug|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Release|x86.ActiveCfg = Release|Any CPU
+		{28CD24BD-432C-4987-9E9D-65CFCF120EA0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
