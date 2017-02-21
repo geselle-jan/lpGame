@@ -1,0 +1,37 @@
+﻿<Properties StartupConfiguration="{D00B22D7-E66F-429B-9B11-BD1295BA218A}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../MonoGame.Extended/Source/MonoGame.Extended/Maps/Tiled/TiledMapReader.cs">
+    <Files>
+      <File FileName="../MonoGame.Extended/Source/MonoGame.Extended/Maps/Tiled/TiledMapReader.cs" Line="127" Column="44" />
+      <File FileName="loafer-project/Game/Level.cs" Line="69" Column="52" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="loafer-project" expanded="True">
+            <Node name="loafer-project" expanded="True">
+              <Node name="References" expanded="True">
+                <Node name="From Packages" expanded="True" />
+              </Node>
+              <Node name="Packages" expanded="True" />
+              <Node name="Content" expanded="True" />
+              <Node name="Game" expanded="True" />
+            </Node>
+            <Node name="MonoGame.Extended" expanded="True">
+              <Node name="Maps" expanded="True">
+                <Node name="Tiled" expanded="True">
+                  <Node name="TiledMapReader.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.loafer-project PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
